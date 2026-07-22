@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local env / artifacts
+.env
+.env.*
+!.env.example
+artifacts/
+workbench.db
+*.db-journal
+
+# IDE / local agent notes
+.vscode/
+.idea/
+.gstack/
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
