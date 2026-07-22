@@ -62,6 +62,10 @@ bash scripts/check_fixture_hashes.sh
 uv run pytest -m phase0
 ```
 
+## Dependency pin note
+
+- `aequitas` is pinned to `1.1.0` in `pyproject.toml` after a local German Credit compatibility smoke (`import aequitas` + `Group().get_crosstabs(...)`).
+
 ## Fixture bootstrap (run once before P0 evals)
 
 See `SPEC-P0-P2-v2.md` §Fixture bootstrap sequence:

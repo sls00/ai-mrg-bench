@@ -1,0 +1,19 @@
+dataset: german_credit
+version: "1.0"
+label_columns:
+  class: credit_risk
+derived_columns:
+  sex:
+    source_column: personal_status
+    mapping:
+      A91: male
+      A92: female
+      A93: male
+      A94: male
+      A95: female
+excluded_from_model_features:
+  - sex
+  - personal_status
+  - class
+  - credit_risk
+  - approval_binary

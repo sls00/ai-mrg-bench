@@ -1,0 +1,8 @@
+protected_attributes:
+  - name: sex
+    prohibited_as_model_input: true
+    allowed_in_dataset: true
+    sources:
+      - direct
+      - bisg_proxy
+      - hmda
