@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
+from workbench.adverse_action import run_adverse_action_translation
 from workbench.audit import AuditStore, verify_audit_chain
 from workbench.bias_battery import run_bias_battery
 from workbench.config import ValidationRunConfig
@@ -101,6 +103,94 @@ class ValidationRun:
             finos_tier=config.audit.finos_tier,
         )
 
+        adverse_action_paths: dict[str, Path] | None = None
+        adverse_action_section: dict[str, object] | None = None
+        if config.modules.adverse_action_translator:
+            artifact_dir.mkdir(parents=True, exist_ok=True)
+            adverse_action = run_adverse_action_translation(
+                dataset=ingestion.dataset,
+                model=ingestion.model,
+                model_features=ingestion.model_features,
+                decision_column=config.decision_column,
+                run_id=config.run_id,
+                model_id=config.model_id,
+                model_version=config.model_version,
+                created_utc=_utc_now(),
+            )
+            methodology_json_path = artifact_dir / "translation_methodology_v1.json"
+            methodology_json_path.write_text(
+                json.dumps(adverse_action.methodology_json, indent=2, sort_keys=True),
+            )
+            methodology_md_path = artifact_dir / "translation_methodology_v1.md"
+            methodology_md_path.write_text(adverse_action.methodology_markdown.strip() + "\n")
+            fidelity_path = artifact_dir / "fidelity_validation_report.json"
+            fidelity_path.write_text(
+                json.dumps(adverse_action.fidelity_json, indent=2, sort_keys=True),
+            )
+            adverse_action_paths = {
+                "methodology_json": methodology_json_path,
+                "methodology_md": methodology_md_path,
+                "fidelity_json": fidelity_path,
+            }
+
+            proxy_features = {
+                entry["feature"] for entry in bias.payload["layers"]["C"]["top_proxy_correlations"]
+            }
+            proxy_overlap = sorted(
+                set(adverse_action.section_summary["top_global_features"]) & proxy_features,
+            )
+            adverse_action_section = {
+                **adverse_action.section_summary,
+                "proxy_overlap_features": proxy_overlap,
+            }
+
+            audit.append_event(
+                event_id=_event_id(),
+                event_type="adverse_action.methodology_published",
+                timestamp_utc=_utc_now(),
+                model_id=config.model_id,
+                model_version=config.model_version,
+                materiality_tier=materiality.tier,
+                actor=config.audit.actor,
+                payload={
+                    "methodology_id": adverse_action.methodology_json["methodology_id"],
+                    "model_id": config.model_id,
+                    "model_version": config.model_version,
+                    "reasoning": {
+                        "summary": (
+                            "Translation methodology artifact published per Reg B Sec 1002.9; "
+                            "hash-bound below via artifact_refs."
+                        ),
+                    },
+                },
+                finos_control="mi-21",
+                finos_tier=config.audit.finos_tier,
+                artifact_refs=[
+                    {
+                        "name": "translation_methodology_v1.json",
+                        "sha256": _sha256_file(methodology_json_path),
+                    },
+                    {
+                        "name": "translation_methodology_v1.md",
+                        "sha256": _sha256_file(methodology_md_path),
+                    },
+                ],
+            )
+
+            for event_payload in adverse_action.attribution_events:
+                audit.append_event(
+                    event_id=_event_id(),
+                    event_type="adverse_action.attribution",
+                    timestamp_utc=_utc_now(),
+                    model_id=config.model_id,
+                    model_version=config.model_version,
+                    materiality_tier=materiality.tier,
+                    actor=config.audit.actor,
+                    payload=event_payload,
+                    finos_control="mi-21",
+                    finos_tier=config.audit.finos_tier,
+                )
+
         audit.append_event(
             event_id=_event_id(),
             event_type="validation_run.complete",
@@ -157,6 +247,8 @@ class ValidationRun:
             "audit_events": audit_summary.total_events,
             "audit_breaks": len(audit_summary.breaks),
         }
+        if adverse_action_section is not None:
+            run_context["adverse_action"] = adverse_action_section
         report = generate_occ_report(
             artifact_dir=artifact_dir,
             run_context=run_context,
@@ -167,6 +259,8 @@ class ValidationRun:
                 "breaks": audit_summary.breaks,
                 "event_type_counts": audit_summary.event_type_counts,
             },
+            appendix_a_path=(adverse_action_paths or {}).get("methodology_json"),
+            appendix_d_path=(adverse_action_paths or {}).get("fidelity_json"),
         )
 
         artifact_refs = [
@@ -184,6 +278,28 @@ class ValidationRun:
                 "sha256": _sha256_file(report.appendix_e_path),
             },
         ]
+        appendices_status = {
+            "A": "N/A",
+            "B": "present",
+            "C": "N/A",
+            "D": "N/A",
+            "E": "present",
+        }
+        if adverse_action_paths is not None:
+            appendices_status["A"] = "present"
+            appendices_status["D"] = "present"
+            artifact_refs.append(
+                {
+                    "name": "translation_methodology_v1.json",
+                    "sha256": _sha256_file(adverse_action_paths["methodology_json"]),
+                },
+            )
+            artifact_refs.append(
+                {
+                    "name": "fidelity_validation_report.json",
+                    "sha256": _sha256_file(adverse_action_paths["fidelity_json"]),
+                },
+            )
         audit.append_event(
             event_id=_event_id(),
             event_type="report.generated",
@@ -194,16 +310,11 @@ class ValidationRun:
             actor=config.audit.actor,
             payload={
                 "report_path": str(report.markdown_path),
-                "appendices": {
-                    "A": "N/A",
-                    "B": "present",
-                    "C": "N/A",
-                    "D": "N/A",
-                    "E": "present",
-                },
+                "appendices": appendices_status,
                 "reasoning": {
                     "summary": (
-                        "P0 report generated with Sections I-VI and appendices B/E."
+                        "Report generated with Sections I-VI and appendices "
+                        + ("A/B/D/E." if adverse_action_paths is not None else "B/E.")
                     ),
                 },
             },

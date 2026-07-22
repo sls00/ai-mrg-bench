@@ -24,6 +24,8 @@ LIMITATIONS_TEXT = (
     "(P3) illustrate jurisdictional framing only."
 )
 
+_APPENDIX_NOT_APPLICABLE = "Not applicable — adverse_action_translator disabled"
+
 
 @dataclass(slots=True)
 class ReportArtifacts:
@@ -31,6 +33,8 @@ class ReportArtifacts:
     report_json_path: Path
     appendix_b_path: Path
     appendix_e_path: Path
+    appendix_a_path: Path | None = None
+    appendix_d_path: Path | None = None
 
 
 def generate_occ_report(
@@ -39,7 +43,17 @@ def generate_occ_report(
     run_context: dict[str, Any],
     bias_summary: dict[str, Any],
     audit_summary: dict[str, Any],
+    appendix_a_path: Path | None = None,
+    appendix_d_path: Path | None = None,
 ) -> ReportArtifacts:
+    """Render the OCC report + write appendices B and E.
+
+    Appendices A (`translation_methodology_v1.json`) and D
+    (`fidelity_validation_report.json`) are written earlier by the P1
+    adverse-action step, before its `adverse_action.methodology_published`
+    audit event — their paths are passed in here only to populate the
+    report appendix index and template context, not written again.
+    """
     artifact_dir.mkdir(parents=True, exist_ok=True)
     appendix_b_path = artifact_dir / "bias_battery_summary.json"
     appendix_b_path.write_text(json.dumps(bias_summary, indent=2, sort_keys=True))
@@ -69,10 +83,10 @@ def generate_occ_report(
         "disclaimer": DISCLAIMER_TEXT,
         "limitations": LIMITATIONS_TEXT,
         "appendices": {
-            "A": "Not applicable in P0",
+            "A": str(appendix_a_path) if appendix_a_path else _APPENDIX_NOT_APPLICABLE,
             "B": str(appendix_b_path),
             "C": "Not run — drift module disabled",
-            "D": "Not applicable in P0",
+            "D": str(appendix_d_path) if appendix_d_path else _APPENDIX_NOT_APPLICABLE,
             "E": str(appendix_e_path),
         },
     }
@@ -84,4 +98,6 @@ def generate_occ_report(
         report_json_path=report_json_path,
         appendix_b_path=appendix_b_path,
         appendix_e_path=appendix_e_path,
+        appendix_a_path=appendix_a_path,
+        appendix_d_path=appendix_d_path,
     )
