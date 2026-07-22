@@ -65,6 +65,17 @@ jobs:
     name: Pytest (${{ matrix.python-version }})
     runs-on: ubuntu-latest
     needs: [banlist, lint, typecheck]
+    # gh pr view --json labels (phase marker resolution below) reads PR labels via
+    # GraphQL, which needs pull-requests:read explicitly -- declaring `permissions`
+    # at all zeroes out every unlisted scope, so contents:read is restated here too
+    # for actions/checkout. Without this block the repo's default GITHUB_TOKEN
+    # permissions were read-only-contents, and gh pr view failed with
+    # "GraphQL: Resource not accessible by integration (repository.pullRequest)",
+    # silently falling back to the unfiltered "Run default tests" step instead of
+    # the intended phase-floor marker expression.
+    permissions:
+      contents: read
+      pull-requests: read
     strategy:
       fail-fast: false
       matrix:
