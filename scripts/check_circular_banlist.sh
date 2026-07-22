@@ -12,15 +12,18 @@
 # are NOT banned — only the exact phrase "Circular 2026-03" is, since there is
 # no legitimate current or historical use of that phrase anywhere in this repo.
 #
-# Scan set at AC0 time: deep-research-v1.md, research/ (the only shipping doc
-# paths that exist pre-bootstrap). The repo-bootstrap PR extends SCAN_PATHS to
-# templates/, src/, README.md once those paths exist (golden tests take over
-# enforcement there).
+# Scan set: deep-research-v1.md, research/, templates/, src/, README.md.
+# Golden tests take over enforcement in src/ post-P0; banlist remains the
+# docs/templates/README gate for shipping copy hygiene.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 BANLIST_PATTERN='Circular 2026-03'
-SCAN_PATHS=(deep-research-v1.md research)
+SCAN_PATHS=(deep-research-v1.md research README.md)
+# Optional paths — added when present (repo-bootstrap+).
+for optional in templates src; do
+  [ -e "$optional" ] && SCAN_PATHS+=("$optional")
+done
 
 # Path-based allowlist: files that legitimately discuss/debunk the phrase —
 # the primary-source verification ticket, its close-out amendment, and the
@@ -32,18 +35,41 @@ is_allowlisted() {
   esac
 }
 
+# Lines that mention the phrase only to forbid, debunk, or mark unsupported are OK.
+is_negated_context() {
+  grep -qiE 'do[[:space:]-]*not|not assert|not operative|unsupported|unverified|❌|debunk|do-not-claim|messaging hygiene|no primary source' <<<"$1"
+}
+
+scan_file_for_violations() {
+  local file=$1
+  local lineno=0
+  local line
+  while IFS= read -r line || [ -n "$line" ]; do
+    lineno=$((lineno + 1))
+    [[ "$line" == *"$BANLIST_PATTERN"* ]] || continue
+    is_negated_context "$line" && continue
+    echo "$lineno:$line"
+  done < "$file"
+}
+
 hits=0
 
 for path in "${SCAN_PATHS[@]}"; do
   [ -e "$path" ] || continue
-  while IFS= read -r -d '' file; do
+  if [ -f "$path" ]; then
+    files=("$path")
+  else
+    mapfile -d '' files < <(find "$path" -type f \( -name '*.md' -o -name '*.py' -o -name '*.jinja2' -o -name '*.j2' \) -print0)
+  fi
+  for file in "${files[@]}"; do
     is_allowlisted "$file" && continue
-    if grep -qF "$BANLIST_PATTERN" "$file"; then
+    violations=$(scan_file_for_violations "$file" || true)
+    if [ -n "$violations" ]; then
       echo "BANLIST VIOLATION: $file"
-      grep -nF "$BANLIST_PATTERN" "$file" | sed 's/^/  /'
+      echo "$violations" | sed 's/^/  /'
       hits=$((hits + 1))
     fi
-  done < <(find "$path" -type f -name '*.md' -print0)
+  done
 done
 
 # RESEARCH_FOUNDATION_v2.md: scanned unless it carries the supersession

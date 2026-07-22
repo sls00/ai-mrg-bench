@@ -1,0 +1,2 @@
+# Git LFS — frozen demo model artifacts (AC4)
+models/*.joblib filter=lfs diff=lfs merge=lfs -text

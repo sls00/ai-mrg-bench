@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  banlist:
+    name: Circular 2026-03 banlist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run banlist check
+        run: bash scripts/check_circular_banlist.sh
+
+  lint:
+    name: Ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --dev
+      - run: uv run ruff check src tests
+
+  typecheck:
+    name: Mypy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --dev
+      - run: uv run mypy src
+
+  fixture-hash:
+    name: Fixture hash verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync
+      - run: bash scripts/check_fixture_hashes.sh
+
+  pytest:
+    name: Pytest (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    needs: [banlist, lint, typecheck]
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: uv sync --dev
+      - name: Resolve phase marker expression
+        id: phase
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          marker=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            labels=$(gh pr view "${{ github.event.pull_request.number }}" \
+              --repo "${{ github.repository }}" \
+              --json labels --jq '.labels[].name' || true)
+            if echo "$labels" | grep -qx 'phase:p2'; then
+              marker='phase0 or phase1 or phase2'
+            elif echo "$labels" | grep -qx 'phase:p1'; then
+              marker='phase0 or phase1'
+            elif echo "$labels" | grep -qx 'phase:p0'; then
+              marker='phase0'
+            fi
+          fi
+          echo "marker=$marker" >> "$GITHUB_OUTPUT"
+      - name: Run default tests
+        if: steps.phase.outputs.marker == ''
+        run: uv run pytest -q
+      - name: Run phase-floor tests
+        if: steps.phase.outputs.marker != ''
+        run: uv run pytest -q -m "${{ steps.phase.outputs.marker }}"
