@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sls00.github.io/ai-mrg-bench/schemas/bias_battery_summary.schema.json",
+  "title": "Bias Battery Summary",
+  "type": "object",
+  "required": [
+    "run_id",
+    "protected_attribute",
+    "reference_group",
+    "jurisdiction_frame",
+    "layers",
+    "reasoning"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protected_attribute": {
+      "type": "string",
+      "const": "sex"
+    },
+    "reference_group": {
+      "type": "string",
+      "minLength": 1
+    },
+    "jurisdiction_frame": {
+      "type": "object",
+      "required": [
+        "federal_ecoa",
+        "fha_overlay",
+        "state_overlay"
+      ],
+      "properties": {
+        "federal_ecoa": {
+          "type": "string",
+          "const": "proxy_discrimination"
+        },
+        "fha_overlay": {
+          "type": "boolean"
+        },
+        "state_overlay": {
+          "type": "string"
+        }
+      }
+    },
+    "layers": {
+      "type": "object",
+      "required": [
+        "A",
+        "B",
+        "C"
+      ],
+      "properties": {
+        "A": {
+          "type": "object",
+          "required": [
+            "air",
+            "selection_rate_gap",
+            "selection_rate_by_group",
+            "smd_score"
+          ],
+          "properties": {
+            "air": {
+              "type": "number"
+            },
+            "selection_rate_gap": {
+              "type": "number"
+            },
+            "selection_rate_by_group": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "smd_score": {
+              "type": "number"
+            }
+          }
+        },
+        "B": {
+          "type": "object",
+          "required": [
+            "fpr_parity_ratio",
+            "fnr_parity_ratio",
+            "fpr_gap",
+            "fnr_gap",
+            "fpr_by_group",
+            "fnr_by_group"
+          ],
+          "properties": {
+            "fpr_parity_ratio": {
+              "type": "number"
+            },
+            "fnr_parity_ratio": {
+              "type": "number"
+            },
+            "fpr_gap": {
+              "type": "number"
+            },
+            "fnr_gap": {
+              "type": "number"
+            },
+            "fpr_by_group": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "fnr_by_group": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "C": {
+          "type": "object",
+          "required": [
+            "top_proxy_correlations",
+            "auxiliary_classifier_auc"
+          ],
+          "properties": {
+            "top_proxy_correlations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "feature",
+                  "abs_correlation"
+                ],
+                "properties": {
+                  "feature": {
+                    "type": "string"
+                  },
+                  "abs_correlation": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "auxiliary_classifier_auc": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "reasoning": {
+      "type": "object",
+      "required": [
+        "why_layer_a",
+        "why_layer_b",
+        "why_layer_c",
+        "regulatory_note"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "aequitas_pin": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

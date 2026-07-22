@@ -1,0 +1,28 @@
+fixture_version: '2026-07-22'
+seed: 42
+derivation_rules_version: '1.0'
+files:
+- path: data/raw/german_credit_uci.csv
+  role: source_of_truth
+  rows: 1000
+  sha256: 5beede9e6453c3074d52c6b1278689415e820cfc5b9fd734cb26bcac60fe1128
+- path: data/german_credit_train.csv
+  role: drift_reference_population
+  rows: 700
+  sha256: 0d1901c2150aecc675fe4c717e76654f20bb95a53c0b2500552b34924bfcf74f
+- path: data/german_credit_validation.csv
+  role: validation_run_primary
+  rows: 300
+  sha256: 4478fb812f9cc95a31342dfa6fd1ee4c7a92eaabd1514cd221b471b529d9dedc
+- path: data/german_credit_monitor.csv
+  role: drift_monitor_injected_shift
+  rows: 300
+  sha256: c88346e5c583803a6701ebeac972001c6a96de83d0ac1c93f6615eeea8c6a5a1
+- path: models/german-credit-xgb-v1.2.joblib
+  role: pre_trained_model
+  rows: null
+  sha256: fa5198da885fb72bc5b7d975abae9f2a258741ec9ce0ce4b63172bae2474900b
+- path: configs/feature_mapping_german_credit.yaml
+  role: adverse_action_feature_dictionary
+  rows: null
+  sha256: c951edc3c047211f0465d0d9cc4f499f7dbc80826d8b9bc94b254bb633ae07b6

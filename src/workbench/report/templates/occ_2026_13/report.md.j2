@@ -1,0 +1,77 @@
+# OCC 2026-13 Validation Report
+
+## I. Introduction
+
+- Run ID: `{{ context.run_id }}`
+- Model: `{{ context.model_id }}` (`{{ context.model_version }}`)
+- Guidance version: `{{ context.guidance_version }}`
+- Validator: `{{ context.actor }}`
+- Intake gate: **{{ context.intake_status }}**
+
+{{ disclaimer }}
+
+## II. Purpose and Scope
+
+- Intended use: {{ context.intended_use }}
+- Materiality: **{{ context.materiality_tier }}** (exposure={{ context.exposure }}, purpose={{ context.purpose }})
+- Regulatory frame:
+  - federal_ecoa: `{{ context.jurisdiction_frame.federal_ecoa }}`
+  - fha_overlay: `{{ context.jurisdiction_frame.fha_overlay }}`
+  - state_overlay: `{{ context.jurisdiction_frame.state_overlay }}`
+
+{{ limitations }}
+
+## III. Overview of Model Risk and MRM
+
+The model is treated as a Tier {{ context.materiality_tier }} credit decisioning model with outcomes-analysis controls and hash-chained evidence for review support.
+
+## IV. Model Development and Model Use
+
+- Methodology type: `{{ context.methodology_type }}`
+- Theory basis: {{ context.theory_basis }}
+- Protected attribute `sex` is reserved for validation and excluded from model features.
+
+## V. Model Validation and Monitoring
+
+### V.1 Conceptual Soundness
+
+Intake gate status is **{{ context.intake_status }}** with rationale: {{ context.intake_reason }}
+
+### V.2 Outcomes Analysis
+
+- Layer A: AIR={{ context.layer_a.air }}, selection-rate gap={{ context.layer_a.selection_rate_gap }}, SMD(score)={{ context.layer_a.smd_score }}
+- Layer B: FPR parity={{ context.layer_b.fpr_parity_ratio }}, FNR parity={{ context.layer_b.fnr_parity_ratio }}
+- Layer C: top proxy correlations captured, auxiliary classifier AUC={{ context.layer_c.auxiliary_classifier_auc }}
+- Challenger outcomes: Not performed
+
+### V.3 Ongoing Model Monitoring
+
+Not run — drift module disabled
+
+## VI. Governance and Controls
+
+- FINOS tier: `{{ context.finos_tier }}`
+- Audit DB: `{{ context.audit_db }}`
+- Audit verification at report generation: **{{ context.audit_status }}** (events={{ context.audit_events }}, breaks={{ context.audit_breaks }})
+
+## Appendices
+
+### Appendix A
+
+Not applicable in P0.
+
+### Appendix B
+
+`bias_battery_summary.json` generated and hash-bound in audit artifacts.
+
+### Appendix C
+
+Not run — drift module disabled.
+
+### Appendix D
+
+Not applicable in P0.
+
+### Appendix E
+
+`audit_chain_verification.json` generated with chain status summary.
