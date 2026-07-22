@@ -25,6 +25,7 @@ LIMITATIONS_TEXT = (
 )
 
 _APPENDIX_NOT_APPLICABLE = "Not applicable — adverse_action_translator disabled"
+_APPENDIX_C_NOT_RUN = "Not run — drift module disabled"
 
 
 @dataclass(slots=True)
@@ -35,6 +36,7 @@ class ReportArtifacts:
     appendix_e_path: Path
     appendix_a_path: Path | None = None
     appendix_d_path: Path | None = None
+    appendix_c_path: Path | None = None
 
 
 def generate_occ_report(
@@ -45,14 +47,16 @@ def generate_occ_report(
     audit_summary: dict[str, Any],
     appendix_a_path: Path | None = None,
     appendix_d_path: Path | None = None,
+    appendix_c_path: Path | None = None,
 ) -> ReportArtifacts:
     """Render the OCC report + write appendices B and E.
 
-    Appendices A (`translation_methodology_v1.json`) and D
-    (`fidelity_validation_report.json`) are written earlier by the P1
-    adverse-action step, before its `adverse_action.methodology_published`
-    audit event — their paths are passed in here only to populate the
-    report appendix index and template context, not written again.
+    Appendices A (`translation_methodology_v1.json`), C (`drift_report.json`),
+    and D (`fidelity_validation_report.json`) are written earlier by the P1
+    adverse-action step and P2 drift step, before their respective
+    `adverse_action.methodology_published` / `drift.event` audit events —
+    their paths are passed in here only to populate the report appendix
+    index and template context, not written again.
     """
     artifact_dir.mkdir(parents=True, exist_ok=True)
     appendix_b_path = artifact_dir / "bias_battery_summary.json"
@@ -85,7 +89,7 @@ def generate_occ_report(
         "appendices": {
             "A": str(appendix_a_path) if appendix_a_path else _APPENDIX_NOT_APPLICABLE,
             "B": str(appendix_b_path),
-            "C": "Not run — drift module disabled",
+            "C": str(appendix_c_path) if appendix_c_path else _APPENDIX_C_NOT_RUN,
             "D": str(appendix_d_path) if appendix_d_path else _APPENDIX_NOT_APPLICABLE,
             "E": str(appendix_e_path),
         },
@@ -100,4 +104,5 @@ def generate_occ_report(
         appendix_e_path=appendix_e_path,
         appendix_a_path=appendix_a_path,
         appendix_d_path=appendix_d_path,
+        appendix_c_path=appendix_c_path,
     )

@@ -9,10 +9,13 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pandas as pd
+
 from workbench.adverse_action import run_adverse_action_translation
 from workbench.audit import AuditStore, verify_audit_chain
 from workbench.bias_battery import run_bias_battery
 from workbench.config import ValidationRunConfig
+from workbench.drift import run_drift_monitor
 from workbench.ingest import load_model_and_dataset, run_intake_gate
 from workbench.materiality import assign_materiality_tier
 from workbench.report import generate_occ_report
@@ -191,6 +194,47 @@ class ValidationRun:
                     finos_tier=config.audit.finos_tier,
                 )
 
+        drift_paths: dict[str, Path] | None = None
+        drift_section: dict[str, object] | None = None
+        if config.modules.drift_monitor:
+            artifact_dir.mkdir(parents=True, exist_ok=True)
+            reference_dataset = pd.read_csv(config.reference_dataset_path)
+            monitor_dataset = pd.read_csv(config.monitor_dataset_path)
+            drift = run_drift_monitor(
+                reference_dataset=reference_dataset,
+                monitor_dataset=monitor_dataset,
+                model=ingestion.model,
+                model_features=ingestion.model_features,
+                protected_attribute=protected.name,
+                reference_group=protected.reference_group,
+                run_id=config.run_id,
+                materiality_tier=materiality.tier,
+                reference_path=str(config.reference_dataset_path),
+                monitor_path=str(config.monitor_dataset_path),
+            )
+            drift_report_path = artifact_dir / "drift_report.json"
+            drift_report_path.write_text(
+                json.dumps(drift.appendix_payload, indent=2, sort_keys=True),
+            )
+            drift_paths = {"drift_report": drift_report_path}
+            drift_section = drift.section_context
+
+            audit.append_event(
+                event_id=_event_id(),
+                event_type="drift.event",
+                timestamp_utc=_utc_now(),
+                model_id=config.model_id,
+                model_version=config.model_version,
+                materiality_tier=materiality.tier,
+                actor=config.audit.actor,
+                payload=drift.payload,
+                finos_control="mi-4",
+                finos_tier=config.audit.finos_tier,
+                artifact_refs=[
+                    {"name": "drift_report.json", "sha256": _sha256_file(drift_report_path)},
+                ],
+            )
+
         audit.append_event(
             event_id=_event_id(),
             event_type="validation_run.complete",
@@ -249,6 +293,8 @@ class ValidationRun:
         }
         if adverse_action_section is not None:
             run_context["adverse_action"] = adverse_action_section
+        if drift_section is not None:
+            run_context["drift"] = drift_section
         report = generate_occ_report(
             artifact_dir=artifact_dir,
             run_context=run_context,
@@ -261,6 +307,7 @@ class ValidationRun:
             },
             appendix_a_path=(adverse_action_paths or {}).get("methodology_json"),
             appendix_d_path=(adverse_action_paths or {}).get("fidelity_json"),
+            appendix_c_path=(drift_paths or {}).get("drift_report"),
         )
 
         artifact_refs = [
@@ -300,6 +347,14 @@ class ValidationRun:
                     "sha256": _sha256_file(adverse_action_paths["fidelity_json"]),
                 },
             )
+        if drift_paths is not None:
+            appendices_status["C"] = "present"
+            artifact_refs.append(
+                {
+                    "name": "drift_report.json",
+                    "sha256": _sha256_file(drift_paths["drift_report"]),
+                },
+            )
         audit.append_event(
             event_id=_event_id(),
             event_type="report.generated",
@@ -313,8 +368,15 @@ class ValidationRun:
                 "appendices": appendices_status,
                 "reasoning": {
                     "summary": (
-                        "Report generated with Sections I-VI and appendices "
-                        + ("A/B/D/E." if adverse_action_paths is not None else "B/E.")
+                        "Report generated with Sections I-VII and appendices "
+                        + "/".join(
+                            sorted(
+                                letter
+                                for letter, status in appendices_status.items()
+                                if status == "present"
+                            ),
+                        )
+                        + "."
                     ),
                 },
             },

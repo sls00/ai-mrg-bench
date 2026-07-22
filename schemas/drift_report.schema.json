@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sls00.github.io/ai-mrg-bench/schemas/drift_report.schema.json",
+  "title": "Drift Monitoring Report",
+  "type": "object",
+  "required": [
+    "run_id",
+    "reference_dataset",
+    "monitor_dataset",
+    "score_drift",
+    "feature_drift",
+    "segment_drift",
+    "materiality_tier",
+    "overall_alert_level",
+    "recommended_action",
+    "escalation",
+    "reasoning"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "reference_dataset": {
+      "type": "object",
+      "required": ["path", "rows"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "rows": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "monitor_dataset": {
+      "type": "object",
+      "required": ["path", "rows"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "rows": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "score_drift": { "$ref": "#/$defs/driftMetric" },
+    "feature_drift": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "allOf": [
+          { "$ref": "#/$defs/driftMetric" },
+          {
+            "type": "object",
+            "required": ["feature"],
+            "properties": { "feature": { "type": "string", "minLength": 1 } }
+          }
+        ]
+      }
+    },
+    "segment_drift": {
+      "type": "object",
+      "required": ["protected_attribute", "reference_group", "by_group"],
+      "properties": {
+        "protected_attribute": { "type": "string", "minLength": 1 },
+        "reference_group": { "type": "string", "minLength": 1 },
+        "by_group": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["psi", "alert_level", "n_reference", "n_monitor"],
+            "properties": {
+              "psi": { "type": "number" },
+              "alert_level": { "type": "string", "enum": ["green", "amber", "red"] },
+              "n_reference": { "type": "integer", "minimum": 0 },
+              "n_monitor": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "materiality_tier": { "type": "string", "enum": ["T1", "T2", "T3"] },
+    "overall_alert_level": { "type": "string", "enum": ["green", "amber", "red"] },
+    "recommended_action": { "type": "string", "minLength": 1 },
+    "escalation": {
+      "type": "object",
+      "required": ["cadence", "validator_notification_days", "tier_policy_note"],
+      "properties": {
+        "cadence": { "type": "string", "enum": ["quarterly", "monthly", "weekly"] },
+        "validator_notification_days": { "type": ["integer", "null"] },
+        "tier_policy_note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "injected_shift_note": { "type": "string" },
+    "reasoning": {
+      "type": "object",
+      "required": ["summary"],
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "driftMetric": {
+      "type": "object",
+      "required": ["psi", "ks_statistic", "ks_pvalue", "alert_level"],
+      "properties": {
+        "psi": { "type": "number" },
+        "ks_statistic": { "type": "number", "minimum": 0, "maximum": 1 },
+        "ks_pvalue": { "type": "number", "minimum": 0, "maximum": 1 },
+        "alert_level": { "type": "string", "enum": ["green", "amber", "red"] }
+      }
+    }
+  },
+  "additionalProperties": true
+}

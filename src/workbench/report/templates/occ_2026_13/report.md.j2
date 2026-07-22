@@ -57,13 +57,41 @@ Adverse-action translation methodology: Not run — adverse_action_translator mo
 
 ### V.3 Ongoing Model Monitoring
 
+{% if context.drift %}
+Score population stability: PSI={{ "%.4f"|format(context.drift.score_psi) }} (**{{ context.drift.score_alert_level | upper }}**); KS statistic={{ "%.4f"|format(context.drift.score_ks_statistic) }} (p={{ "%.4f"|format(context.drift.score_ks_pvalue) }}).
+
+Feature CSI on the injected covariate-shift monitor split:
+
+| Feature | PSI | KS statistic | KS p-value | Alert |
+| ------- | --- | ------------ | ---------- | ----- |
+{% for feature in context.drift.feature_drift %}
+| {{ feature.feature }} | {{ "%.4f"|format(feature.psi) }} | {{ "%.4f"|format(feature.ks_statistic) }} | {{ "%.4f"|format(feature.ks_pvalue) }} | {{ feature.alert_level | upper }} |
+{% endfor %}
+
+Segment-level score PSI by `{{ context.drift.segment_drift.protected_attribute }}` (fair-lending subgroup stability bridge; reference group `{{ context.drift.segment_drift.reference_group }}`):
+
+| Group | PSI | Alert | n (reference) | n (monitor) |
+| ----- | --- | ----- | -------------- | ------------ |
+{% for group, metrics in context.drift.segment_drift.by_group.items() %}
+| {{ group }} | {{ "%.4f"|format(metrics.psi) }} | {{ metrics.alert_level | upper }} | {{ metrics.n_reference }} | {{ metrics.n_monitor }} |
+{% endfor %}
+
+Overall alert level: **{{ context.drift.overall_alert_level | upper }}** at materiality tier **{{ context.drift.materiality_tier }}**.
+
+Escalation narrative (R-05 Sec4 tier matrix): {{ context.drift.recommended_action }} Monitoring cadence at tier {{ context.drift.materiality_tier }} is **{{ context.drift.cadence }}**{% if context.drift.validator_notification_days %}; this alert requires validator notification within {{ context.drift.validator_notification_days }} days{% endif %}. Root-cause analysis and re-validation scoping proceed per the tier-escalation policy above. This drift is injected covariate shift for pedagogical demonstration, not observed production drift (see Sec II limitations).
+{% else %}
 Not run — drift module disabled
+{% endif %}
 
 ## VI. Governance and Controls
 
 - FINOS tier: `{{ context.finos_tier }}`
 - Audit DB: `{{ context.audit_db }}`
 - Audit verification at report generation: **{{ context.audit_status }}** (events={{ context.audit_events }}, breaks={{ context.audit_breaks }})
+
+## VII. Vendor and Other Third-Party Products
+
+Not applicable — in-house model. `vendor_flag: false`; no third-party vendor scoring API is used for this validation run.
 
 ## Appendices
 
@@ -81,7 +109,11 @@ Not applicable — adverse_action_translator module disabled.
 
 ### Appendix C
 
+{% if context.drift %}
+`drift_report.json` generated with score PSI={{ "%.4f"|format(context.drift.score_psi) }}, overall alert level **{{ context.drift.overall_alert_level | upper }}**; hash-bound in the `drift.event` and `report.generated` audit events.
+{% else %}
 Not run — drift module disabled.
+{% endif %}
 
 ### Appendix D
 
