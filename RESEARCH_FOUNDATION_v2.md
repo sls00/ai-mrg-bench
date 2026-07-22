@@ -4,6 +4,8 @@
 **Prepared:** 2026-07-20, by Claude (background session), for Steven Sorenson.
 **Supersedes:** `RESEARCH_FOUNDATION.md` (v1), kept in this directory as a record of what changed and why — not for reuse.
 
+> **⚠ Supersession notice (added 2026-07-22, AC0 messaging amendment):** This document is frozen as a launch-pad/historical artifact; its body is not mutated by this notice (R-14 §6 P2) and is excluded from the project's automated messaging-hygiene scan. Two corrections apply to the body below: (1) §3.2's claim that "Circular 2026-03" reaffirms the withdrawn 2022-03/2023-03 circulars is **❌ unsupported** — a dedicated primary-source search (`research/findings/R-12-circular-2026-03-primary-verification.md`) found no such circular on CFPB.gov or in the Federal Register; treat it as unverified, not current CFPB authority. (2) The "Reg B July 2026 narrowing" scope described in §3.2 is superseded by `research/findings/R-02-reg-b-july-2026-verification.md`. **Shipping authority for this project is `deep-research-v1.md` plus `research/findings/R-01` through `R-14` — not this document.** See `research/findings/R-12-circular-2026-03-primary-verification.md` and `research/findings/R-14-r12-r13-closeout-amendment-proposal.md` for full detail.
+
 ## 0. Purpose and Scope of This Document
 
 This is the reference document a deep-research pass should be launched _from_, not the deep research output itself. It exists to keep first-principles decisions about architecture, tech stack, and implementation approach rooted in regulatory truth and trusted technical reference material — not in career positioning, hiring-market signal, or the incidental tech choices of unrelated prior projects.

@@ -6,8 +6,8 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 
 | ID | Source | Tier | Used in | Status | Notes |
 | -- | ------ | ---- | ------- | ------ | ----- |
-| S-01 | Chartis MRM Solutions 2024 (Genpact PDF mirror) | 3 | R-01 | ⚠ | 30 vendor names; Chartis primary paywalled |
-| S-02 | Gartner MQ AI Governance Platforms Jun 2026 | 3 | R-01 | ⚠ | Vendor press + secondary; MQ paywalled |
+| S-01 | Chartis MRM Solutions 2024 (Genpact PDF mirror) | 3 | R-01 | ✅ | Full Genpact licensed reprint read (R-13); cross-confirmed by ValidMind/SAS/CRISIL/Evalueserve wire releases |
+| S-02 | Gartner MQ AI Governance Platforms Jun 2026 | 3 | R-01 | ⚠ | MQ paywalled; all 13 placements cross-confirmed via 7 vendor press releases + Sanjeev Mohan independent writeup (R-13); zero contradictions |
 | S-03 | ValidMind product brief + Chartis graphics | 2/3 | R-01 | ✅ | |
 | S-04 | SAS Chartis 2024 press release | 3 | R-01 | ✅ | |
 | S-05 | Solytics MRM Vault / SR 26-2 whitepaper | 3 | R-01 | ✅ | |
@@ -23,7 +23,7 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 | S-15 | Federal Register 91 FR 21620 (Reg B) | 1 | R-02 | ✅ | Effective 2026-07-21 |
 | S-16 | CFPB Regulation B landing page | 1 | R-02 | ✅ | |
 | S-17 | Venable / GT / KPMG Reg B alerts | 2 | R-02 | ⚠ | Cross-corroborated |
-| S-18 | CFPB Circular 2022-03 (adverse action) | 1 | R-02, R-04 | ✅ | Black-box holding unchanged |
+| S-18 | CFPB Circular 2022-03 (adverse action) | 1 | R-02, R-04 | ✅ | Black-box holding text unchanged; formally withdrawn by CFPB May 12, 2025 (S-65) — still reachable at original URL; underlying ECOA/Reg B statute unaffected |
 | S-19 | CFPB proxy-methodology GitHub + 2014 report | 1 | R-03 | ✅ | BISG; 2020 Census DHC update Apr 2024 |
 | S-20 | Federal Register 91 FR 21620 preamble | 1 | R-03 | ✅ | Proxy analysis commentary |
 | S-21 | EEOC Uniform Guidelines 4/5ths rule Q&A | 1 | R-03 | ✅ | AIR threshold origin |
@@ -36,9 +36,9 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 | S-28 | Asurity Advisors BISG overview | 2 | R-03 | ⚠ | Industry practice corroboration |
 | S-29 | Pace Analytics Reg B LDA/proxy post | 2 | R-03 | ⚠ | Debiasing/proxy risk flag |
 | S-30 | HuggingFace alerterra/credit_scoring_fairness | 3 | R-03 | ⚠ | Synthetic test data (102 rows) |
-| S-31 | CFPB Circular 2023-03 PDF | 1 | R-04 | ✅ | Specificity, checklist insufficiency |
+| S-31 | CFPB Circular 2023-03 PDF | 1 | R-04 | ✅ | Specificity, checklist insufficiency; formally withdrawn by CFPB May 12, 2025 (S-65) — page shows "Archived content" banner; underlying ECOA/Reg B statute unaffected |
 | S-32 | CFPB Innovation Spotlight (AI/ML adverse action) | 1 | R-04 | ✅ | Official Interpretation flexibility |
-| S-33 | CFPB Circular 2026-03 (via R-02 + trade press) | 1 | R-04 | ⚠ | Translation methodology requirement |
+| S-33 | Unverified CFPB circular numbered "2026-03" (via R-02 + trade press) | 1 | R-04 | ❌ | Not found on CFPB.gov or Federal Register (R-12); no primary or secondary source located as of 2026-07-21; not used as authority |
 | S-34 | Reg B §1002.9 + Official Interpretation | 1 | R-04 | ✅ | Statutory anchor |
 | S-35 | SHAP library / Lundberg & Lee | 2 | R-04 | ✅ | Attribution method |
 | S-36 | BrightCloud ECOA explainability analysis | 2 | R-04 | ⚠ | SHAP vs LIME stability |
@@ -67,5 +67,30 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 | S-59 | NY A773B bill text (pending lending ADMT) | 1 | R-08 | ✅ | Not enacted; watchlist |
 | S-60 | FINOS ri-22 regulatory compliance (GitHub) | 1 | R-08, R-09 | ✅ | State-law flag corroboration |
 | S-61 | CA AB 1018 bill text (pending ADS DIA) | 1 | R-08 | ✅ | Not enacted; watchlist |
+| S-62 | CFPB Guidance index (`consumerfinance.gov/compliance/guidance/`) | 1 | R-12 | ✅ | Last circular listed: 2024-07 |
+| S-63 | CFPB Circular 2022-03 primary page (re-fetch) | 1 | R-12 | ✅ | Text matches R-04; withdrawn per S-65 |
+| S-64 | CFPB Circular 2023-03 primary page (re-fetch) | 1 | R-12 | ✅ | Archived banner; withdrawn |
+| S-65 | CFPB "Withdrawn Guidance" index | 1 | R-12 | ✅ | 2022-03 & 2023-03 withdrawn 2025-05-12 |
+| S-66 | Federal Register doc. 2025-08286 / 90 FR 20084 (withdrawal rule) | 1 | R-12 | ✅ | Mass guidance withdrawal |
+| S-67 | Federal Register API — exact-phrase search for unverified "2026-03" circular, CFPB agency filter | 1 | R-12 | ✅ | Zero results — negative evidence |
+| S-68 | Federal Register API — CFPB "circular" documents ≥2025-01-01 | 1 | R-12 | ✅ | 12 results; none a new CFPB circular |
+| S-69 | Federal Register doc. 2026-07804 / 91 FR 21620 full text | 1 | R-12 | ✅ | Confirms R-02; no adverse-action/SHAP content |
+| S-70 | CFPB Newsroom press-release archive, Feb 2025–Jun 2026 | 1 | R-12 | ✅ | No circular announcement |
+| S-71 | CFPB Innovation Spotlight re-fetch (S-32) | 1 | R-12 | ✅ | Still live/unchanged; no reference to a 2026 circular |
+| S-72 | Chartis MRM 2024 full PDF (Genpact reprint) | 3 | R-13 | ✅ | Same doc as S-01; full read |
+| S-73 | ValidMind Chartis press (Business Wire) | 3 | R-13 | ✅ | Triple Category Leader claim |
+| S-74 | SAS Chartis press (PR Newswire) | 3 | R-13 | ✅ | Top governance score / 19 vendors |
+| S-75 | CRISIL Chartis press | 3 | R-13 | ✅ | Triple Category Leader |
+| S-76 | Evalueserve Chartis press | 3 | R-13 | ✅ | Triple Category Leader |
+| S-77 | Chartis-research.com report landing (metadata) | 3 | R-13 | ⚠ | Existence/authors confirmed; full text paywalled |
+| S-78 | Gartner MQ vendor press bundle (7 vendors) | 3 | R-13 | ✅ | Corroborates S-02 placements |
+| S-79 | Sanjeev Mohan Medium MQ breakdown | 2 | R-13 | ✅ | Independent all-13 placement match |
+| S-80 | getaigovernance.net Gartner MQ post | 3 | R-13 | ⚠ | Cross-check Niche/Challenger |
+| S-81 | Forrester Wave AI Governance Q3 2025 | 3 | R-13 | ⚠ | Layer B set; no ValidMind/SAS/Solytics |
+| S-82 | IDC MarketScape Unified AI Gov 2025–26 | 3 | R-13 | ⚠ | Same Layer B finding |
+| S-83 | Solytics Chartis AI Governance 2026 leader press | 3 | R-13 | ⚠ | Separate report from S-01 |
+| S-84 | NMP trade-press article, Jul 9 2026 (Andrew Liput) | 3 | R-14 | ❌ | False secondary — invents a nonexistent CFPB circular numbered "2026-03"; do not cite as corroboration |
 
 **R-10 note:** No new external sources added. R-10 binds S-24, S-03, S-38, S-45, S-52–S-54 and prior finding files (R-03–R-09). Fixture SHA-256 hashes will be recorded in `manifests/german_credit_fixture_manifest.yaml` at build-time freeze.
+
+**R-14 note:** S-62–S-84 added per the R-12/R-13 close-out (`research/findings/R-14-r12-r13-closeout-amendment-proposal.md` §5). S-33 downgraded ⚠ → ❌; S-01 upgraded ⚠ → ✅; S-18/S-31 annotated with May 12, 2025 withdrawal status.

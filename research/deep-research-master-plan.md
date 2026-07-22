@@ -119,7 +119,7 @@ Tickets are **sequenced by dependency**, not arbitrary priority. Tier 3 (R-01) i
 
 ### R-04 — Interpretability → Adverse-Action Pipeline
 
-**Objective:** Recommend interpretability approach (SHAP vs. alternatives) and mapping pipeline to CFPB Circular 2026-03 "documented translation methodology" requirement.
+**Objective:** Recommend interpretability approach (SHAP vs. alternatives) and mapping pipeline for a documented translation methodology artifact, anchored in Reg B §1002.9 and historical CFPB adverse-action guidance (not a distinct CFPB circular — see R-12/R-14).
 
 ---
 

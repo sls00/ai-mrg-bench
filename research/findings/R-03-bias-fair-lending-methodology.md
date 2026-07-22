@@ -30,7 +30,7 @@ R-02 verified that effective **July 21, 2026**, Reg B eliminates federal ECOA di
 
 - Disparate treatment (including intentional proxy use)
 - Adverse-action notice requirements (unchanged)
-- CFPB Circular 2026-03 documentation requirements (unchanged)
+- Reg B §1002.9 adverse-action documentation requirements (unchanged; not sourced to a distinct CFPB circular — see R-12/R-14)
 - FHA disparate impact (Supreme Court *Inclusive Communities*)
 - State fair-lending laws (ticket R-08)
 

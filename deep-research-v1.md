@@ -22,7 +22,7 @@ Ship an **open, model-agnostic validation workbench** for **traditional ML credi
 | - | -------------- | ------ | -------- |
 | **1** | Post–July 2026 **proxy-discrimination test suite** + jurisdiction overlays (federal, FHA, CO/CA/NY) | `bias_battery` | ✅ R-02 verified; R-01 gap #4; FINOS ri-16 statistical gap |
 | **2** | **OCC 2026-13 literal seven-section** validation report with hash-bound appendices | `report_generator` | ✅ R-01 gap #2; vendors still on SR 11-7 / three-pillar framing |
-| **3** | **CFPB Circular 2026-03 translation methodology artifact** (SHAP → Reg B reasons) | `adverse_action_translator` | ✅ R-04; R-01 gap #3; Holistic/Fiddler have attribution, not Reg B translator |
+| **3** | **Documented SHAP → Reg B §1002.9 adverse-action translation methodology artifact** (versioned, hash-bound; encodes historical CFPB Circular 2022-03 / 2023-03 interpretive positions — withdrawn May 12, 2025 — plus Innovation Spotlight practice notes) | `adverse_action_translator` | ✅ R-04 design; ❌ no primary source found for a distinct "2026-03" circular (R-12); market gap vs Holistic/Fiddler attribution-only (R-01) |
 
 ### 1.3 Secondary differentiators (v1 build, selective demo)
 
@@ -68,7 +68,7 @@ Ship an **open, model-agnostic validation workbench** for **traditional ML credi
 **Do claim:**
 - Produces **validation evidence** structured for OCC 2026-13 seven-section independent review
 - **Proxy-discrimination statistical battery** aligned with post–July 2026 federal ECOA framing
-- **Documented translation methodology** for adverse-action factor mapping (Circular 2026-03 pattern)
+- **Documented factor→reason mapping methodology** for examiner/reviewer validation (Reg B §1002.9)
 - Audit trail implements **FINOS AIR-DET-021 Tier 1–2** controls by ID
 - Jurisdiction overlays for **FHA, Colorado, California ADMT, and NY DFS insurance** testing frames
 
@@ -80,6 +80,8 @@ Ship an **open, model-agnostic validation workbench** for **traditional ML credi
 - "EU AI Act conformity assessment complete" (deadline Dec 2027)
 - "Gen-AI / agentic MRM compliant" (explicitly out of OCC scope)
 - "Replaces enterprise MRM platform" (ValidMind/SAS territory)
+- "Satisfies current CFPB guidance numbered 2026-03" (no such document exists — R-12)
+- "Implements current non-withdrawn CFPB circular guidance on AI adverse action" (Circular 2022-03/2023-03 withdrawn May 12, 2025)
 
 **Report §I disclaimer (embed in every report):**
 
@@ -127,7 +129,7 @@ Legend: ✅ explicit public evidence | ⚠ partial | ❌ not found
 
 1. Unified model-agnostic validation engine (sklearn + labeled CSV → full battery)
 2. OCC 2026-13 **seven-section** report generator (literal I–VII)
-3. ECOA adverse-action translator + **Circular 2026-03 methodology artifact**
+3. ECOA adverse-action translator + **Reg B §1002.9 documented translation methodology artifact**
 4. Post–July 2026 **proxy-discrimination** suite as primary federal layer
 5. FINOS **mi-21** tiered audit trail cited by control ID
 6. FINOS **ri-16** statistical bias gap in AIGF catalogue
@@ -151,7 +153,7 @@ Legend: ✅ explicit public evidence | ⚠ partial | ❌ not found
 | **Discouragement** prohibition narrowed | ✅ | Out of v1 scope |
 | **SPCP** restrictions for for-profit creditors | ✅ | Out of v1 scope |
 | **Adverse-action notices** (§1002.9) | ✅ Unchanged | Core P1 module |
-| **Circular 2026-03** translation methodology | ✅ Operative ⚠ S-33 | Core P1 artifact |
+| "2026-03" circular translation methodology | ❌ Not operative — no primary source found (R-12) | Removed as authority; use Reg B §1002.9 + historical Circular 2022-03/2023-03 (withdrawn May 12, 2025) instead |
 | **Proxy discrimination** + disparate treatment | ✅ Preserved | **Primary federal statistical frame** |
 | **FHA** disparate impact | ✅ Unchanged | Optional `fha_overlay` toggle |
 
@@ -223,7 +225,7 @@ regulatory_frame:
 
 **SHAP over LIME:** Deterministic, additive, industry-dominant ⚠ S-35; LIME opt-in with stability gate only.
 
-**Regulatory anchors:** §1002.9 ✅ S-34; Circular 2022-03 ✅ S-18; Circular 2023-03 ✅ S-31; Circular 2026-03 ⚠ S-33 (secondary corroboration).
+**Regulatory anchors:** §1002.9 ✅ S-34 (statutory anchor); Circular 2022-03 ✅ S-18 and Circular 2023-03 ✅ S-31 (historical CFPB interpretive positions — formally withdrawn May 12, 2025, per CFPB's Withdrawn Guidance index; persuasive as interpretive history, not current guidance); CFPB Innovation Spotlight ✅ S-32. No primary source found for a distinct "2026-03" circular (R-12); S-33 downgraded to ❌ and not used as authority.
 
 ### 4.3 Drift detection & materiality escalation (R-05)
 
@@ -415,8 +417,8 @@ Extends foundation §3.6 with ECOA/Reg B column and Workbench module bindings (R
 | Validation report (CS / OA / OMM) | §V | — | Art. 11, 15 | MEASURE 2.9 | mi-5 | `report_generator` §V.1–V.3 |
 | Statistical bias / fair-lending | §V outcomes | Proxy disc. (fed); FHA/state DIA | Art. 10 | MEASURE 2.11 | **gap → mi-5 evidence** | `bias_battery` → `bias_battery.result` |
 | State overlay (CO/CA/NY) | §V context | Overlays R-08 | Art. 10 deployer | MEASURE 2.11 | ri-22 | `regulatory_frame.state_overlay` |
-| Adverse-action translator | — adjacent | §1002.9; Circ. 2026-03 | Art. 13 | MEASURE 2.9 | — | `adverse_action_translator` |
-| Translation methodology artifact | §V.1 / Appx A | Circ. 2026-03 | — | — | mi-21 | `translation_methodology_v{N}.json` |
+| Adverse-action translator | — adjacent | §1002.9 (statutory); historical Circ. 2022-03/2023-03 | Art. 13 | MEASURE 2.9 | — | `adverse_action_translator` |
+| Translation methodology artifact | §V.1 / Appx A | §1002.9; historical Circ. 2022-03/2023-03 | — | — | mi-21 | `translation_methodology_v{N}.json` |
 | Drift monitoring + escalation | §V.3 | — | Art. 72 | MANAGE 4.1 | mi-4 | `drift_monitor` → `drift.event` |
 | Tamper-evident audit log | §VI | — | Art. 12 | GOVERN 4.2 | **mi-21 Tier 1–2** | `audit_log` hash chain |
 | Human override / governance | §VI | — | Art. 14 | GOVERN 3.2 | mi-11 | `governance.approval` event |
@@ -463,7 +465,7 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 | S-30 | HuggingFace alerterra/credit_scoring_fairness | 3 | R-03 | ⚠ |
 | S-31 | CFPB Circular 2023-03 PDF | 1 | R-04 | ✅ |
 | S-32 | CFPB Innovation Spotlight (AI/ML adverse action) | 1 | R-04 | ✅ |
-| S-33 | CFPB Circular 2026-03 (via R-02 + trade press) | 1 | R-04 | ⚠ |
+| S-33 | Unverified CFPB circular numbered "2026-03" (via R-02 + trade press) — not found on CFPB.gov or Federal Register (R-12) | 1 | R-04 | ❌ |
 | S-34 | Reg B §1002.9 + Official Interpretation | 1 | R-04 | ✅ |
 | S-35 | SHAP library / Lundberg & Lee | 2 | R-04 | ✅ |
 | S-36 | BrightCloud ECOA explainability analysis | 2 | R-04 | ⚠ |
@@ -509,7 +511,7 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 | B4 | Fidelity human-review sign-off UX | Tier-2 audit slot; manual notebook acknowledgment for demo |
 | B5 | CI canonical path | **CLI** for CI (`P2` + `verify-chain`); notebook for portfolio review |
 | B6 | Hypothesis tests for audit chain | Mirror model-ledger pattern ✅ S-46 |
-| B7 | Circular 2026-03 primary PDF spot-check | Fetch CFPB.gov before load-bearing copy ships |
+| B7 | ~~Primary-source spot-check of the unverified "2026-03" circular claim~~ | ✅ **Resolved (R-12/R-14):** No such circular exists on CFPB.gov or in the Federal Register. Differentiator #3 reworded to Reg B §1002.9 + historical Circular 2022-03/2023-03 (withdrawn May 12, 2025). The Jul 9, 2026 trade-press article (S-84) is a false secondary — do not cite as corroboration. |
 | B8 | `admt_risk_assessment_summary.json` field list | Map to CPPA §7152; refine after first enforcement |
 
 ### 10.2 v1.1 enhancements (owner: v1.1)
@@ -535,6 +537,7 @@ Legend: ✅ primary verified | ⚠ secondary/partial | ❌ unverified or inacces
 | W4 | NY A773B / CA AB 1018 enactment | Add `NY_LENDING` / `CA_ADS` overlay profiles |
 | W5 | CO AG rules ECOA safe harbor mapping | Counsel review for R-04 output vs SB 189 disclosures |
 | W6 | Section 1071 small-business lending | Out of v1 unless demo pivots |
+| W7 | CFPB reissue of adverse-action/AI explainability guidance | Unknown; deregulatory posture 2025–2026 (May 2025 mass withdrawal). Monitor CFPB circulars/Federal Register; do not pre-claim reaffirmation (R-14 §3.2) |
 
 ### 10.4 Resolved in research (no further action)
 
