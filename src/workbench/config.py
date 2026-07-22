@@ -72,6 +72,8 @@ class ValidationRunConfig:
     modules: ModuleFlags
     audit: AuditConfig
     outputs: OutputConfig
+    reference_dataset_path: Path | None = None
+    monitor_dataset_path: Path | None = None
 
     @classmethod
     def from_yaml(cls, path: Path) -> ValidationRunConfig:
@@ -89,6 +91,23 @@ class ValidationRunConfig:
             for item in run["protected_attributes"]
         ]
         base_dir = path.parent
+        modules = ModuleFlags(**run["modules"])
+        reference_dataset_path = (
+            _resolve_existing_path(run["reference_dataset"], base_dir)
+            if "reference_dataset" in run
+            else None
+        )
+        monitor_dataset_path = (
+            _resolve_existing_path(run["monitor_dataset"], base_dir)
+            if "monitor_dataset" in run
+            else None
+        )
+        drift_datasets_missing = reference_dataset_path is None or monitor_dataset_path is None
+        if modules.drift_monitor and drift_datasets_missing:
+            raise ValueError(
+                f"{path}: modules.drift_monitor is true but reference_dataset and "
+                "monitor_dataset must both be configured",
+            )
         return cls(
             run_id=run["run_id"],
             model_id=run.get("model_id", "german-credit-xgb"),
@@ -104,7 +123,7 @@ class ValidationRunConfig:
             protected_attributes=protected,
             regulatory_frame=RegulatoryFrameConfig(**run["regulatory_frame"]),
             materiality=MaterialityConfig(**run["materiality"]),
-            modules=ModuleFlags(**run["modules"]),
+            modules=modules,
             audit=AuditConfig(
                 finos_tier=int(run["audit"]["finos_tier"]),
                 actor=run["audit"]["actor"],
@@ -114,6 +133,8 @@ class ValidationRunConfig:
                 report_format=list(run["outputs"]["report_format"]),
                 artifact_dir_template=run["outputs"]["artifact_dir"],
             ),
+            reference_dataset_path=reference_dataset_path,
+            monitor_dataset_path=monitor_dataset_path,
         )
 
     def as_metadata(self) -> dict[str, Any]:
