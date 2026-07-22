@@ -15,7 +15,7 @@
 **Primary differentiators (build first):**
 1. Integrated **proxy-discrimination battery** + jurisdiction overlays (federal post–Reg B, FHA, CO/CA/NY) — FINOS ri-16 gap
 2. **OCC 2026-13 literal seven-section** validation report with hash-bound appendices
-3. **CFPB Circular 2026-03 translation methodology artifact** (adverse-action pipeline)
+3. **Reg B §1002.9 documented translation methodology artifact** (adverse-action pipeline; not sourced to a distinct CFPB circular — see R-12/R-14)
 
 **Secondary differentiators (build in v1, demo selectively):**
 4. FINOS **mi-21 Tier 1–2** hash-chained audit log cited by control ID
@@ -83,7 +83,7 @@
 | ---- | -------------- | -------- | ---------------- |
 | **1** | **Post–July 2026 proxy-discrimination test suite** + jurisdiction overlays | R-01 gap #4; R-02 verified; no competitor ships FINOS ri-16 statistical control | `bias_battery` |
 | **2** | **OCC 2026-13 seven-section report** (literal I–VII) | R-01 gap #2; vendors still on three-pillar / SR 11-7 framing | `report_generator` |
-| **3** | **Circular 2026-03 translation methodology artifact** | R-01 gap #3; R-04 pipeline; Holistic/Fiddler have attribution not Reg B translator | `adverse_action_translator` |
+| **3** | **Reg B §1002.9 documented translation methodology artifact** | R-01 gap #3; R-04 pipeline; Holistic/Fiddler have attribution not Reg B translator | `adverse_action_translator` |
 
 ### 3.2 Secondary (strengthen portfolio; demo selectively)
 
@@ -149,7 +149,7 @@ Architecture bindings from R-06 added in **Workbench module** column.
 **Do claim:**
 - "Produces **validation evidence** structured for OCC 2026-13 seven-section independent review"
 - "**Proxy-discrimination statistical battery** aligned with post–July 2026 federal ECOA framing"
-- "**Documented translation methodology** for adverse-action factor mapping (Circular 2026-03 pattern)"
+- "**Documented factor→reason mapping methodology** for examiner/reviewer validation (Reg B §1002.9)"
 - "Audit trail implements **FINOS AIR-DET-021 Tier 1–2** controls by ID"
 - "Jurisdiction overlays for **FHA, Colorado, California ADMT, and NY DFS insurance** testing frames"
 
@@ -212,7 +212,7 @@ Architecture bindings from R-06 added in **Workbench module** column.
 | - | -------------------------- | -------------- |
 | 1 | Model-agnostic ingest → full validation battery | ✅ P0 — sklearn + CSV |
 | 2 | OCC seven-section report literal I–VII | ✅ P0 — primary report structure |
-| 3 | Circular 2026-03 translation methodology artifact | ✅ P1 — Appendix A |
+| 3 | Reg B §1002.9 documented translation methodology artifact | ✅ P1 — Appendix A |
 | 4 | Post–July 2026 proxy-discrimination suite | ✅ P0 — default federal frame |
 | 5 | FINOS mi-21 tiered audit cited by control ID | ✅ P0 — Tier 1–2 implement |
 | 6 | Open statistical bias module (FINOS gap) | ✅ P0 — `bias_battery` |

@@ -8,9 +8,13 @@
 
 ---
 
+> **Erratum (2026-07-22, R-12/R-14 close-out):** This document's Executive Summary, §2, §5, §9, and §10 originally cited a since-unverified CFPB circular numbered "2026-03" as authority for the translation-methodology requirement below. A dedicated primary-source search (`research/findings/R-12-circular-2026-03-primary-verification.md`) found no such circular on CFPB.gov, in CFPB's Newsroom archive, or in the Federal Register; the only located secondary source (a July 9, 2026 trade-press article) is itself contradicted by CFPB's own indexes and is treated as a false secondary (`research/findings/R-14-r12-r13-closeout-amendment-proposal.md` §3.1). The citation has been removed throughout this document. **The design is unaffected:** the translation-methodology artifact remains anchored in the binding statute/regulation (ECOA §701(d), Reg B §1002.9) plus CFPB's historical Circular 2022-03 and 2023-03 interpretive positions — both formally withdrawn May 12, 2025 (CFPB "Withdrawn Guidance" index) but still persuasive as interpretive history. See R-12 and R-14 for full verification detail.
+
+---
+
 ## 1. Executive summary
 
-**Recommendation:** Use **SHAP (TreeSHAP primary, KernelSHAP fallback)** as the core attribution engine for tabular credit models, with a **mandatory four-stage translation pipeline** that produces a **documented mapping methodology artifact** per CFPB Circular 2026-03. LIME is supported only as an optional secondary method with **stability validation** (not default). Native interpretable models (WOE scorecards, logistic regression) use **coefficient-based attribution** as the primary path, with SHAP as cross-check.
+**Recommendation:** Use **SHAP (TreeSHAP primary, KernelSHAP fallback)** as the core attribution engine for tabular credit models, with a **mandatory four-stage translation pipeline** that produces a **documented mapping methodology artifact** aligned with Reg B §1002.9 and CFPB's historical adverse-action interpretive guidance (see erratum above). LIME is supported only as an optional secondary method with **stability validation** (not default). Native interpretable models (WOE scorecards, logistic regression) use **coefficient-based attribution** as the primary path, with SHAP as cross-check.
 
 **Differentiator (R-01 gap):** No identified competitor exports an auditable factor→reason translation methodology as a first-class artifact. The Workbench should generate this as a versioned, hash-chained document bound to model version.
 
@@ -25,7 +29,7 @@
 | Cannot use closest checklist reason if inaccurate | Circular 2023-03 | ✅ |
 | Cannot rely on model complexity as defense | Circular 2022-03 | ✅ |
 | Post-hoc explanations must be **validated for accuracy** | Circular 2022-03 | ✅ |
-| **Document translation methodology** for fair-lending reviewer validation | Circular 2026-03 | ✅ (secondary corroboration; primary PDF not independently fetched this session ⚠) |
+| **Document translation methodology** for fair-lending reviewer validation | Reg B §1002.9; historical Circular 2022-03/2023-03 practice | ⚠ Reframed — see erratum above; not a distinct circular requirement |
 
 **Key Circular 2022-03 holding (primary ✅):**
 
@@ -36,7 +40,7 @@
 - "purchasing history" insufficient for credit-line reduction — must disclose establishment type, location, goods
 - Sample form checklist is **not** automatically sufficient
 
-**Circular 2026-03 (May 5, 2026):** Reaffirms 2022-03/2023-03 after May 2025 withdrawal; adds explicit requirement to **document how model outputs translate to consumer-facing explanations** so fair lending reviewers can independently validate. ⚠ Confirmed via R-02, foundation §3.2, and trade press (NMP May 2026); CFPB circular page not independently fetched this session.
+**Design intent (superseded citation — see erratum above):** The translation-methodology artifact requirement below is *not* sourced to a distinct CFPB circular. It is Workbench design practice, motivated by the historical Circular 2022-03/2023-03 interpretive positions (validated post-hoc explanations; specific, non-checklist reasons) and grounded directly in the binding Reg B §1002.9 specific-reasons requirement.
 
 ---
 
@@ -175,7 +179,7 @@ mapping_methodology_v1:
 
 ---
 
-## 5. Documented translation methodology artifact (Circular 2026-03)
+## 5. Documented translation methodology artifact (Reg B §1002.9)
 
 This is a **standalone, versioned document** — not embedded in code comments. It must be independently reviewable by a fair-lending examiner.
 
@@ -245,7 +249,7 @@ This is a **standalone, versioned document** — not embedded in code comments. 
 | S-18 | CFPB Circular 2022-03 (primary PDF + web) | 1 | ✅ | Black-box holding, validation requirement |
 | S-31 | CFPB Circular 2023-03 PDF | 1 | ✅ | Specificity, checklist insufficiency |
 | S-32 | CFPB Innovation Spotlight (AI/ML adverse action) | 1 | ✅ | Official Interpretation flexibility |
-| S-33 | CFPB Circular 2026-03 (via R-02 + trade press) | 1 | ⚠ | Translation methodology requirement |
+| S-33 | Superseded citation — see erratum above; downgraded per R-12/R-14 (no primary source found) | 1 | ❌ | Not used as authority; translation methodology anchored in S-18/S-31/S-32/S-34 instead |
 | S-34 | Reg B §1002.9 + Official Interpretation | 1 | ✅ | Statutory anchor |
 | S-35 | SHAP (Lundberg & Lee 2017) / shap Python library | 2 | ✅ | Attribution method |
 | S-36 | BrightCloud ECOA explainability analysis | 2 | ⚠ | SHAP vs LIME stability |
@@ -255,7 +259,7 @@ This is a **standalone, versioned document** — not embedded in code comments. 
 
 ## 10. Open questions
 
-1. **Circular 2026-03 primary text:** Spot-check CFPB.gov page before build if language is load-bearing beyond R-02 summary.
+1. ~~Primary-source spot-check of the unverified "2026-03" circular claim~~ — ✅ **Resolved (R-12/R-14):** no such circular exists on CFPB.gov or the Federal Register; see erratum above.
 2. **FCRA adverse action (credit score factors):** Separate from Reg B; v1 scope is Reg B only — confirm no FCRA key-factors module needed.
 3. **Counterfactual reasons:** EU/consumer-friendly supplement; not required for US §1002.9 — defer to v2.
 4. **Multi-model ensembles:** Attribution aggregation across champion/challenger — R-06 architecture question.

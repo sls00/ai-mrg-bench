@@ -7,6 +7,10 @@
 
 ---
 
+> **Erratum (2026-07-22, R-12/R-14 close-out):** The "Executive finding" and §Implications below originally cited a CFPB circular numbered "2026-03" (dated May 5, 2026) as "still operative" authority. A dedicated primary-source search (`research/findings/R-12-circular-2026-03-primary-verification.md`) found no such circular on CFPB.gov, in CFPB's Newsroom archive, or in the Federal Register — it does not exist and was never operative. The only located secondary source (a July 9, 2026 trade-press article) is contradicted by CFPB's own indexes and is treated as a false secondary (`research/findings/R-14-r12-r13-closeout-amendment-proposal.md` §3.1). What genuinely did not change on July 21, 2026 is the **statutory/regulatory** adverse-action notice requirement — ECOA §701(d) and Reg B §1002.9 — plus the historical interpretive content of CFPB Circular 2022-03 and 2023-03, both formally withdrawn May 12, 2025.
+
+---
+
 ## Executive finding
 
 **VERIFIED ✅** — The "July 2026 Reg B narrowing" referenced in `RESEARCH_FOUNDATION_v2.md` §3.2 is real, but the foundation document **underspecified** what changed. The April 22, 2026 CFPB final rule (Federal Register **91 FR 21620**, document **2026-07804**) is effective **July 21, 2026** and makes three material amendments to Regulation B Subpart A:
@@ -18,7 +22,7 @@
 **What did NOT change (critical for Workbench scope):**
 
 - **Adverse action notice requirements** under ECOA §701(d) and Reg B §1002.9 — **unchanged in substance**.
-- **CFPB Circular 2026-03** (May 5, 2026) requirement to document how model outputs translate to consumer-facing explanations — **still operative** for fair-lending reviewers; this is orthogonal to the disparate-impact removal.
+- **Reg B §1002.9** requirement to document how model outputs translate to consumer-facing explanations — statutory, unaffected by the disparate-impact removal (see erratum above: not sourced to a distinct "2026-03" circular).
 - **Disparate treatment** and **proxy discrimination** — explicitly preserved; facially neutral criteria that are proxies for protected characteristics remain actionable.
 - **Fair Housing Act** disparate impact — **still enforceable** (Supreme Court *Inclusive Communities*); state fair-lending laws may retain disparate-impact theories.
 
@@ -47,8 +51,8 @@
 | ------------ | ---------------------- | ------------------------------------- |
 | Adverse impact ratio / four-fifths rule | Primary federal fair-lending statistical test | **Still valuable** for FHA, state law, internal risk management, and OCC MRM "outcomes analysis" — but **no longer a federal ECOA disparate-impact compliance test** |
 | Proxy discrimination analysis | Important adjunct | **Elevated to primary federal ECOA statistical concern** alongside disparate treatment |
-| Adverse-action reason translation | Required (§1002.9 + Circular 2026-03) | **Unchanged — remains core demo module** |
-| Model documentation for reviewer validation | Circular 2026-03 | **Unchanged** |
+| Adverse-action reason translation | Required (§1002.9; historical Circular 2022-03/2023-03) | **Unchanged — remains core demo module** |
+| Model documentation for reviewer validation | §1002.9; historical Circular 2022-03/2023-03 | **Unchanged** |
 
 **Recommendation:** Position the statistical bias module as serving **(a)** OCC 2026-13 outcomes analysis / NIST MEASURE 2.11 / EU AI Act Art. 10, **(b)** FHA and state-law disparate-impact where applicable, and **(c)** proxy-discrimination detection under the revised Reg B — not solely as an ECOA disparate-impact compliance tool.
 

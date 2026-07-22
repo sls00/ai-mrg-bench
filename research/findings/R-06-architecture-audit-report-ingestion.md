@@ -491,4 +491,4 @@ validation_run:
 2. **model-ledger bidirectional sync** — export-only vs full inventory replacement; R-10/R-build decision.
 3. **Streaming drift adapter** — batch v1; Kafka/EventBridge interface sketch for v2.
 4. **Multi-model ensemble attribution** — R-04 open question; aggregate SHAP across ensemble members.
-5. **Circular 2026-03 primary PDF** — spot-check before build (carried from R-04).
+5. ~~Primary-source spot-check of the unverified "2026-03" circular claim~~ — ✅ Resolved: no such circular exists (R-12/R-14); differentiator #3 re-anchored to Reg B §1002.9 + historical Circular 2022-03/2023-03 (withdrawn May 12, 2025).

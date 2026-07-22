@@ -24,7 +24,7 @@ The market splits into **four distinct layers** that are frequently conflated:
 1. Model-agnostic ingest of arbitrary `.predict()`/`.predict_proba()` models + labeled dataset
 2. OCC **2026-13 seven-section** validation report structure (most still mentally organized around SR 11-7 three pillars)
 3. Dedicated statistical fair-lending battery with **proxy-discrimination** focus post–Reg B July 2026
-4. CFPB Circular 2026-03 adverse-action translation with **documented mapping methodology artifact**
+4. Reg B §1002.9 adverse-action translation with **documented mapping methodology artifact** (not sourced to a distinct CFPB circular — see R-12/R-14)
 5. FINOS **AIR-DET-021 Tier 2–3** tamper-evident audit trail as a first-class, citable implementation
 
 Enterprise vendors cover subsets; OSS covers components; **the integrated, auditor-facing, open/portfolio-scale workbench remains unoccupied.**
@@ -166,7 +166,7 @@ Selection criteria: financial-services MRM relevance, feature depth verifiable f
 | **Framework claims** | **SR 26-2** explicitly (whitepapers post-April 2026); SR 11-7, EU AI Act, SS1/23, OSFI E-23, MAS FEAT |
 | **OCC 2026-13 seven sections** | ⚠ Closest public vendor narrative to **materiality-tiered** governance — but not structured as seven named report sections |
 | **Bias/fair-lending** | ✅ NIMBUS Uno lists **Fair Lending** as pre-built regulatory solution |
-| **Adverse-action** | ⚠ Fair lending module implied; no CFPB Circular 2026-03 mapping artifact |
+| **Adverse-action** | ⚠ Fair lending module implied; no Reg B §1002.9 documented mapping artifact |
 | **Audit log** | ✅ "Audit trail for all major and minor changes" |
 | **LLM/agentic** | ⚠ LLM contextual search in Vault; gen-AI carve-out acknowledged in SR 26-2 whitepaper |
 | **Drift monitoring** | ✅ Threshold-triggered re-validation |
@@ -356,7 +356,7 @@ Selection criteria: financial-services MRM relevance, feature depth verifiable f
 
 1. **Unified model-agnostic validation engine** — ingest arbitrary sklearn-compatible model + labeled CSV/Parquet; run full battery without enterprise platform lock-in
 2. **OCC 2026-13 seven-section report generator** — literal section mapping (I–VII), not three-pillar retrofit
-3. **ECOA adverse-action translator** with **Circular 2026-03 mapping methodology artifact** (auditable factor→reason pipeline)
+3. **ECOA adverse-action translator** with **Reg B §1002.9 documented mapping methodology artifact** (auditable factor→reason pipeline; not sourced to a distinct CFPB circular — see R-12/R-14)
 4. **Post–July 2026 proxy-discrimination test suite** as primary federal fair-lending statistical layer (see R-02)
 5. **FINOS AIR-DET-021 tiered audit trail** implemented and cited by control ID (mi-21) — Monitaur closest commercially; none cite FINOS
 6. **FINOS bias-testing gap** — no ri-16 statistical mitigation in AIGF catalogue (foundation §3.5 confirmed)
