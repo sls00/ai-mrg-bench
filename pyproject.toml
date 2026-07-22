@@ -94,5 +94,6 @@ module = [
     "pandas",
     "sklearn",
     "sklearn.*",
+    "shap",
 ]
 ignore_missing_imports = true

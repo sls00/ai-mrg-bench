@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sls00.github.io/ai-mrg-bench/schemas/fidelity_validation.schema.json",
+  "title": "Adverse-Action Fidelity Validation Report",
+  "type": "object",
+  "required": [
+    "fidelity_report_id",
+    "model_id",
+    "model_version",
+    "run_id",
+    "methodology_id",
+    "created_utc",
+    "adverse_decision_pool_size",
+    "batch_size",
+    "tests",
+    "overall_status",
+    "reasoning"
+  ],
+  "properties": {
+    "fidelity_report_id": {
+      "type": "string",
+      "const": "fidelity_report_v1"
+    },
+    "model_id": { "type": "string", "minLength": 1 },
+    "model_version": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "methodology_id": { "type": "string", "minLength": 1 },
+    "created_utc": { "type": "string", "minLength": 1 },
+    "adverse_decision_pool_size": { "type": "integer", "minimum": 1 },
+    "batch_size": { "type": "integer", "minimum": 1 },
+    "tests": {
+      "type": "object",
+      "required": [
+        "rank_stability",
+        "perturbation_fidelity",
+        "surrogate_agreement",
+        "sample_audit",
+        "lime_stability"
+      ],
+      "properties": {
+        "rank_stability": {
+          "type": "object",
+          "required": ["method", "pass_rate", "threshold", "status"],
+          "properties": {
+            "method": { "type": "string" },
+            "pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+            "threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "perturbation_fidelity": {
+          "type": "object",
+          "required": ["method", "pass_rate", "threshold", "status"],
+          "properties": {
+            "method": { "type": "string" },
+            "pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+            "threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "surrogate_agreement": {
+          "type": "object",
+          "required": ["status", "reason"],
+          "properties": {
+            "status": { "type": "string", "enum": ["not_applicable", "pass", "fail"] },
+            "reason": { "type": "string" }
+          }
+        },
+        "sample_audit": {
+          "type": "object",
+          "required": ["method", "pass_rate", "threshold", "status", "human_review_status"],
+          "properties": {
+            "method": { "type": "string" },
+            "pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+            "threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+            "status": { "type": "string", "enum": ["pass", "fail"] },
+            "human_review_status": { "type": "string" }
+          }
+        },
+        "lime_stability": {
+          "type": "object",
+          "required": ["status", "reason"],
+          "properties": {
+            "status": { "type": "string", "enum": ["not_applicable", "pass", "fail"] },
+            "reason": { "type": "string" }
+          }
+        }
+      }
+    },
+    "overall_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "reasoning": {
+      "type": "object",
+      "required": ["summary"],
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

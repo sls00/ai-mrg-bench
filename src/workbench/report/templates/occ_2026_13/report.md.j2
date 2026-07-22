@@ -37,12 +37,23 @@ The model is treated as a Tier {{ context.materiality_tier }} credit decisioning
 
 Intake gate status is **{{ context.intake_status }}** with rationale: {{ context.intake_reason }}
 
+{% if context.adverse_action %}
+Adverse-action translation methodology overview: {{ context.adverse_action.attribution_method }}
+Top global adverse factors observed in the fidelity batch: {{ context.adverse_action.top_global_features | join(', ') }}.
+Fidelity validation (`{{ context.adverse_action.fidelity_report_id }}`) overall status: **{{ context.adverse_action.fidelity_status }}** over a batch of {{ context.adverse_action.batch_size }} adverse decisions (pool size {{ context.adverse_action.adverse_decision_pool_size }}). See Appendix A (methodology) and Appendix D (fidelity validation).
+{% else %}
+Adverse-action translation methodology: Not run — adverse_action_translator module disabled.
+{% endif %}
+
 ### V.2 Outcomes Analysis
 
 - Layer A: AIR={{ context.layer_a.air }}, selection-rate gap={{ context.layer_a.selection_rate_gap }}, SMD(score)={{ context.layer_a.smd_score }}
 - Layer B: FPR parity={{ context.layer_b.fpr_parity_ratio }}, FNR parity={{ context.layer_b.fnr_parity_ratio }}
 - Layer C: top proxy correlations captured, auxiliary classifier AUC={{ context.layer_c.auxiliary_classifier_auc }}
 - Challenger outcomes: Not performed
+{% if context.adverse_action %}
+- Proxy-risk cross-check (R-04 Sec 6): {% if context.adverse_action.proxy_overlap_features %}adverse-action principal-reason feature(s) also flagged in Layer C proxy correlations: {{ context.adverse_action.proxy_overlap_features | join(', ') }} — reasons for these factors disclose the specific scored value, not a broad proxy-obscuring bucket.{% else %}no overlap between adverse-action principal-reason features and Layer C top proxy correlations in this run.{% endif %}
+{% endif %}
 
 ### V.3 Ongoing Model Monitoring
 
@@ -58,7 +69,11 @@ Not run — drift module disabled
 
 ### Appendix A
 
-Not applicable in P0.
+{% if context.adverse_action %}
+`translation_methodology_v1.json` / `.md` generated and hash-bound in the `adverse_action.methodology_published` audit event.
+{% else %}
+Not applicable — adverse_action_translator module disabled.
+{% endif %}
 
 ### Appendix B
 
@@ -70,7 +85,11 @@ Not run — drift module disabled.
 
 ### Appendix D
 
-Not applicable in P0.
+{% if context.adverse_action %}
+`fidelity_validation_report.json` generated; overall status **{{ context.adverse_action.fidelity_status }}**; hash-bound in the `report.generated` audit event.
+{% else %}
+Not applicable — adverse_action_translator module disabled.
+{% endif %}
 
 ### Appendix E
 
