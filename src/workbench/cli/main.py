@@ -17,6 +17,11 @@ app = typer.Typer(
 validate_app = typer.Typer(name="validate", help="Validation workflows.")
 audit_app = typer.Typer(name="audit", help="Audit log workflows.")
 CONFIG_OPTION = typer.Option(..., "--config", exists=True, file_okay=True)
+OUTPUT_DIR_OPTION = typer.Option(
+    None,
+    "--output-dir",
+    help="Override outputs.artifact_dir from the config (P3 CA overlay demo path).",
+)
 DB_OPTION = typer.Option(Path("workbench.db"), "--db")
 
 
@@ -38,9 +43,14 @@ def main() -> None:
 
 
 @validate_app.command("run")
-def validate_run(config: Path = CONFIG_OPTION) -> None:
+def validate_run(
+    config: Path = CONFIG_OPTION,
+    output_dir: Path | None = OUTPUT_DIR_OPTION,
+) -> None:
     """Run one validation workflow from a YAML config."""
     run = ValidationRun.from_config(config)
+    if output_dir is not None:
+        run.config.outputs.artifact_dir_template = str(output_dir)
     result = run.run()
     typer.echo(f"run_id={result.run_id}")
     typer.echo(f"artifact_dir={result.artifact_dir}")

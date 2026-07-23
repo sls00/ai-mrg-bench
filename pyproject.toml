@@ -66,7 +66,7 @@ markers = [
     "phase0: P0 integration and golden tests",
     "phase1: P1 adverse-action slice",
     "phase2: P2 drift, API, and full demo",
-    "phase3: P3 CA overlay (stub)",
+    "phase3: P3 CA/CO state-overlay differentiation demo",
     "phase4: P4 Home Credit + BISG (stub)",
     "api: FastAPI endpoint smoke tests",
 ]
