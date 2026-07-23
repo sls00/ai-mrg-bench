@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - name: Run banlist check
         run: bash scripts/check_circular_banlist.sh
 
@@ -24,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
@@ -38,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
@@ -52,6 +58,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
@@ -82,6 +90,8 @@ jobs:
         python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
