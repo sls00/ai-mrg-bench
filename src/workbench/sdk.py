@@ -18,6 +18,7 @@ from workbench.config import ValidationRunConfig
 from workbench.drift import run_drift_monitor
 from workbench.ingest import load_model_and_dataset, run_intake_gate
 from workbench.materiality import assign_materiality_tier
+from workbench.overlay import resolve_state_overlay
 from workbench.report import generate_occ_report
 
 
@@ -93,6 +94,33 @@ class ValidationRun:
             run_id=config.run_id,
             regulatory_frame=config.regulatory_frame,
         )
+
+        # Overlay artifacts must exist on disk (and be hash-bound) before
+        # bias_battery.result is appended — audit log is append-only.
+        artifact_dir.mkdir(parents=True, exist_ok=True)
+        overlay = resolve_state_overlay(
+            state_overlay=config.regulatory_frame.state_overlay,
+            run_id=config.run_id,
+            bias_layers=bias.payload["layers"],
+            layer_a_label=str(bias.payload["layer_a_label"]),
+            protected_attribute=protected.name,
+        )
+        if overlay is not None:
+            overlay_path = artifact_dir / overlay.artifact_name
+            overlay_path.write_text(
+                json.dumps(overlay.artifact_payload, indent=2, sort_keys=True),
+            )
+            bias.payload["jurisdiction_frame"]["state_authority"] = overlay.state_authority
+            bias.payload["overlay_artifacts"] = [
+                {
+                    "name": overlay.artifact_name,
+                    "sha256": _sha256_file(overlay_path),
+                },
+            ]
+            bias.appendix_payload["jurisdiction_frame"] = dict(
+                bias.payload["jurisdiction_frame"],
+            )
+
         audit.append_event(
             event_id=_event_id(),
             event_type="bias_battery.result",
@@ -109,7 +137,6 @@ class ValidationRun:
         adverse_action_paths: dict[str, Path] | None = None
         adverse_action_section: dict[str, object] | None = None
         if config.modules.adverse_action_translator:
-            artifact_dir.mkdir(parents=True, exist_ok=True)
             adverse_action = run_adverse_action_translation(
                 dataset=ingestion.dataset,
                 model=ingestion.model,
@@ -197,7 +224,6 @@ class ValidationRun:
         drift_paths: dict[str, Path] | None = None
         drift_section: dict[str, object] | None = None
         if config.modules.drift_monitor:
-            artifact_dir.mkdir(parents=True, exist_ok=True)
             reference_dataset = pd.read_csv(config.reference_dataset_path)
             monitor_dataset = pd.read_csv(config.monitor_dataset_path)
             drift = run_drift_monitor(
@@ -291,6 +317,14 @@ class ValidationRun:
             "audit_events": audit_summary.total_events,
             "audit_breaks": len(audit_summary.breaks),
         }
+        if overlay is not None:
+            run_context["jurisdiction_frame"]["state_authority"] = overlay.state_authority
+            run_context["regulatory_frames"] = overlay.regulatory_frames
+            run_context["overlay_non_claims"] = overlay.overlay_non_claims
+            run_context["overlay_subsection_lines"] = overlay.overlay_subsection_lines
+            run_context["overlay_battery_label"] = overlay.battery_label
+            run_context["overlay_significant_decision"] = overlay.significant_decision
+            run_context["overlay_artifact_name"] = overlay.artifact_name
         if adverse_action_section is not None:
             run_context["adverse_action"] = adverse_action_section
         if drift_section is not None:

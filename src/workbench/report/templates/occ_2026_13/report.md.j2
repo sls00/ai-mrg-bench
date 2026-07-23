@@ -18,6 +18,25 @@
   - federal_ecoa: `{{ context.jurisdiction_frame.federal_ecoa }}`
   - fha_overlay: `{{ context.jurisdiction_frame.fha_overlay }}`
   - state_overlay: `{{ context.jurisdiction_frame.state_overlay }}`
+{% if context.jurisdiction_frame.state_overlay != "none" %}
+
+### Regulatory frames active for this validation run
+
+| Frame | Authority | Role |
+| ----- | --------- | ---- |
+{% for row in context.regulatory_frames %}
+| {{ row.frame }} | {{ row.authority }} | {{ row.role }} |
+{% endfor %}
+
+- Significant decision: {{ context.overlay_significant_decision }}
+- Statistical battery label: {{ context.overlay_battery_label }}
+- Overlay evidence artifact: `{{ context.overlay_artifact_name }}`
+{% for line in context.overlay_subsection_lines %}
+- {{ line }}
+{% endfor %}
+
+{{ context.overlay_non_claims }}
+{% endif %}
 
 {{ limitations }}
 

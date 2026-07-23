@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sls00.github.io/ai-mrg-bench/schemas/admt_risk_assessment.schema.json",
+  "title": "ADMT Risk Assessment Summary (CA CCPA/CPRA ADMT — demo template)",
+  "description": "Self-designed export aligned to Cal. Code Regs tit. 11 §7152 negative-impact categories. Not a CPPA-certified field list; risk-assessment evidence only.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "run_id",
+    "authority",
+    "significant_decision_category",
+    "admt_purpose",
+    "negative_impact_categories_considered",
+    "discrimination_harms_evidence",
+    "safeguards_documented",
+    "non_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "artifact_kind": {
+      "type": "string",
+      "const": "admt_risk_assessment_summary"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "significant_decision_category": {
+      "type": "string",
+      "const": "financial_or_lending_services"
+    },
+    "admt_purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "negative_impact_categories_considered": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "discrimination_harms_evidence": {
+      "type": "object",
+      "required": [
+        "protected_attribute",
+        "layer_a_label",
+        "layer_a",
+        "layer_b",
+        "layer_c",
+        "messaging"
+      ],
+      "properties": {
+        "protected_attribute": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layer_a_label": {
+          "type": "string",
+          "const": "outcomes_analysis_risk_assessment_evidence"
+        },
+        "layer_a": {
+          "type": "object",
+          "required": ["air", "selection_rate_gap", "smd_score"],
+          "properties": {
+            "air": { "type": "number" },
+            "selection_rate_gap": { "type": "number" },
+            "smd_score": { "type": "number" }
+          }
+        },
+        "layer_b": {
+          "type": "object",
+          "required": ["fpr_parity_ratio", "fnr_parity_ratio"],
+          "properties": {
+            "fpr_parity_ratio": { "type": "number" },
+            "fnr_parity_ratio": { "type": "number" }
+          }
+        },
+        "layer_c": {
+          "type": "object",
+          "required": ["auxiliary_classifier_auc", "top_proxy_correlations"],
+          "properties": {
+            "auxiliary_classifier_auc": { "type": "number" },
+            "top_proxy_correlations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["feature", "abs_correlation"],
+                "properties": {
+                  "feature": { "type": "string" },
+                  "abs_correlation": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "messaging": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "safeguards_documented": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["safeguard", "status"],
+        "properties": {
+          "safeguard": { "type": "string" },
+          "status": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "admt_bias_expert_consultation": {
+      "type": "string"
+    },
+    "pre_use_notice": {
+      "type": "string"
+    },
+    "non_claims": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

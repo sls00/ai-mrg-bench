@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sls00.github.io/ai-mrg-bench/schemas/co_disclosure_checklist.schema.json",
+  "title": "Colorado SB 26-189 Disclosure Checklist (demo template)",
+  "description": "Checklist-only artifact for CO overlay demos. No ADMT risk-assessment export and no statutory DIA claim.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "run_id",
+    "authority",
+    "consequential_domain",
+    "disparate_impact_battery",
+    "checklist",
+    "non_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "artifact_kind": {
+      "type": "string",
+      "const": "co_disclosure_checklist"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "consequential_domain": {
+      "type": "string",
+      "const": "financial_or_lending"
+    },
+    "disparate_impact_battery": {
+      "type": "boolean",
+      "const": false
+    },
+    "checklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["item", "status"],
+        "properties": {
+          "item": { "type": "string" },
+          "status": { "type": "string" },
+          "notes": { "type": "string" },
+          "window_days": { "type": "integer" },
+          "retention_years": { "type": "integer" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "non_claims": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

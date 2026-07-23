@@ -1,0 +1,37 @@
+validation_run:
+  run_id: german-credit-demo-co-overlay
+  model_id: german-credit-xgb
+  model_version: v1.2
+  model: models/german-credit-xgb-v1.2.joblib
+  dataset: data/german_credit_validation.csv
+  reference_dataset: data/german_credit_train.csv
+  monitor_dataset: data/german_credit_monitor.csv
+  decision_column: approval_binary
+  label_column: credit_risk
+  intended_use: Credit decisioning support for validation demonstration.
+  methodology_type: statistical_credit_model
+  theory_basis: Gradient-boosted statistical credit-risk model trained on UCI German Credit.
+  guidance_version: OCC-2026-13
+  protected_attributes:
+    - name: sex
+      source: direct
+      reference_group: male
+  regulatory_frame:
+    federal_ecoa: proxy_discrimination
+    fha_overlay: false
+    state_overlay: CO
+  materiality:
+    exposure: 0.15
+    exposure_unit: portfolio_pct
+    purpose: credit_decisioning
+  modules:
+    bias_battery: true
+    adverse_action_translator: true
+    drift_monitor: true
+  audit:
+    finos_tier: 2
+    actor: validator@example.com
+    db_path: workbench.db
+  outputs:
+    report_format: [markdown]
+    artifact_dir: artifacts/{run_id}

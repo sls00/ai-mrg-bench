@@ -25,6 +25,7 @@ Branch protection is **not** enabled on this private repo (free-tier limitation)
 | P0 | `feat/p0-core-loop` | `phase:p0` |
 | P1 | `feat/p1-adverse-action` | `phase:p1` |
 | P2 | `feat/p2-drift-ci-api` | `phase:p2` |
+| P3 | `feat/p3-ca-overlay` | `phase:p3` |
 
 ```bash
 git worktree add ../ai-mrg-bench-p0 -b feat/p0-core-loop main
@@ -42,6 +43,7 @@ GitHub Actions reads the PR label (`pull_request.labels` / `gh pr view`) and gat
 | `phase:p0` | `-m phase0` | ruff, mypy, fixture-hash |
 | `phase:p1` | `-m "phase0 or phase1"` | same |
 | `phase:p2` | `-m "phase0 or phase1 or phase2"` | + API smoke (`-m "phase2 and api"`) |
+| `phase:p3` | `-m "phase0 or phase1 or phase2 or phase3"` | same |
 
 Unlabeled PRs run lint/type-check + banlist only (no phase pytest floor).
 
