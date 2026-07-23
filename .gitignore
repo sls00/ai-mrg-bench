@@ -19,6 +19,9 @@ artifacts/
 workbench.db
 *.db-journal
 
+# Private learning resources (not for repo)
+docs/learn/03-demo-script.md
+
 # IDE / local agent notes
 .vscode/
 .idea/
