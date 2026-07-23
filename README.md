@@ -2,7 +2,7 @@
 
 Open, model-agnostic validation workbench for traditional ML credit models: tiering, bias/proxy testing, adverse-action translation, drift monitoring, hash-chained audit log, and OCC seven-section reporting.
 
-**Status:** P0–P3 German Credit demo path implemented (P4 Home Credit/BISG deferred).
+**Status:** P0–P3 German Credit demo path implemented; P4 Home Credit/BISG architecture notebook shipped (no CI gate).
 
 ## Quick start
 
@@ -38,12 +38,30 @@ uv run workbench audit verify-chain
 
 The CA/CO `state_overlay` toggle is a **jurisdictional-frame demonstration** on UCI German Credit (non-US data, no race/BISG). It changes report §II framing and emits overlay evidence artifacts for portfolio review. It is **not** a compliance determination, CPPA certification, California AG determination, or Colorado AG determination. Layer A metrics are labeled **outcomes analysis / risk-assessment evidence**, never ECOA or state disparate-impact compliance.
 
+## Notebooks
+
+| Notebook | Role |
+| -------- | ---- |
+| [`notebooks/01_german_credit_validation.ipynb`](notebooks/01_german_credit_validation.ipynb) | Thin companion: CLI wrappers for the P2 full run + P3 CA overlay, ending in a side-by-side §II diff. Restores the dropped P2 AC notebook surface without rewriting the full R-10 §5.1 tutorial — **CLI remains canonical** for CI/reproducibility. |
+| [`notebooks/02_home_credit_bias_proxy.ipynb`](notebooks/02_home_credit_bias_proxy.ipynb) | P4 scale story: Home Credit + `surgeo` BISG **architecture** (illustrative US surname/ZCTA sample; no production module; no CI gate). |
+
+```bash
+uv sync --all-extras --dev
+uv run jupyter notebook notebooks/01_german_credit_validation.ipynb
+uv run jupyter notebook notebooks/02_home_credit_bias_proxy.ipynb
+```
+
+### P4 demo limitation (BISG architecture only)
+
+German Credit has no US surname/geography fields, so race/ethnicity BISG cannot run on the canonical demo. P4 documents how a Home Credit–scale proxy path would attach to Layer C via `surgeo`, using a **synthetic US panel** (`data/illustrative/home_credit_bisg_proxy_sample.csv`) — not a vendored Kaggle dump. `surgeo` 1.1.2 uses 2010 Census tables (2020 DHC gap: deep-research V4/V5). This is review-support architecture evidence, not an ECOA determination.
+
 ## Documentation
 
 - Research baseline: [`deep-research-v1.md`](deep-research-v1.md)
 - Developer guide: [`docs/dev.md`](docs/dev.md)
 - Build spec: [`.gstack/SPEC-P0-P2-v2.md`](.gstack/SPEC-P0-P2-v2.md) (local agent context; not committed)
 - P3 authority: [`research/findings/R-10-mvp-phasing-demo-scenario.md`](research/findings/R-10-mvp-phasing-demo-scenario.md) §2/§3/§8; [`research/findings/R-08-state-ai-lending-laws.md`](research/findings/R-08-state-ai-lending-laws.md)
+- P4 BISG authority: R-03, R-07, R-10 §2 P4 row; caveats V4/V5 in [`deep-research-v1.md`](deep-research-v1.md) §10.2
 
 ## Do-not-claim (messaging hygiene)
 

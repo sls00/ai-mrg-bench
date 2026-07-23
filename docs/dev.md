@@ -26,6 +26,7 @@ Branch protection is **not** enabled on this private repo (free-tier limitation)
 | P1 | `feat/p1-adverse-action` | `phase:p1` |
 | P2 | `feat/p2-drift-ci-api` | `phase:p2` |
 | P3 | `feat/p3-ca-overlay` | `phase:p3` |
+| P4 | `feat/p4-home-credit-bisg` | `phase:p4` (label only — **no CI phase floor**; R-10 documented-architecture exit) |
 
 ```bash
 git worktree add ../ai-mrg-bench-p0 -b feat/p0-core-loop main
@@ -44,8 +45,9 @@ GitHub Actions reads the PR label (`pull_request.labels` / `gh pr view`) and gat
 | `phase:p1` | `-m "phase0 or phase1"` | same |
 | `phase:p2` | `-m "phase0 or phase1 or phase2"` | + API smoke (`-m "phase2 and api"`) |
 | `phase:p3` | `-m "phase0 or phase1 or phase2 or phase3"` | same |
+| `phase:p4` | **none** (intentionally omitted from CI label resolver) | same lint/banlist/fixture gates as unlabeled; notebooks are review-only |
 
-Unlabeled PRs run lint/type-check + banlist only (no phase pytest floor).
+Unlabeled PRs run lint/type-check + banlist only (no phase pytest floor). `phase:p4` matches that behavior on purpose (R-10: documented architecture only).
 
 ## Local checks
 
