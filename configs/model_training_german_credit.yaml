@@ -1,0 +1,93 @@
+# Hyperparameter lock for models/german-credit-xgb-v1.2.joblib.
+#
+# Record-only: documents the exact parameters that produced the frozen model
+# artifact pinned in manifests/german_credit_fixture_manifest.yaml. Not read by
+# any CLI/pipeline code. The values below are transcribed from, and verified
+# against, scripts/bootstrap_german_credit_fixtures.py and the artifact's live
+# get_params() output at freeze time (R-10 section 10.2 item 1).
+#
+# Frozen models are never retrained in place: a hyperparameter or data change
+# requires a new model_version, a fixture re-freeze
+# (scripts/freeze_german_credit_fixtures.py), and an update to both this file
+# and the fixture manifest.
+
+model:
+  model_id: german-credit-xgb
+  model_version: v1.2
+  artifact_path: models/german-credit-xgb-v1.2.joblib
+  fixture_version: "2026-07-22"
+  training_script: scripts/bootstrap_german_credit_fixtures.py
+  invocation: "python scripts/bootstrap_german_credit_fixtures.py --seed 42"
+  seed: 42
+
+library_versions_at_freeze:
+  python: "3.11"
+  xgboost: "3.2.0"
+  scikit-learn: "1.9.0"
+
+data_split:
+  source: data/raw/german_credit_uci.csv
+  method: sklearn.model_selection.train_test_split
+  test_size: 0.30
+  stratify: credit_risk
+  random_state: 42
+  train_rows: 700
+  validation_rows: 300
+
+feature_pipeline:
+  type: sklearn.pipeline.Pipeline
+  steps:
+    - name: preprocessor
+      type: sklearn.compose.ColumnTransformer
+      transformers:
+        - name: categorical
+          type: sklearn.preprocessing.OneHotEncoder
+          params:
+            handle_unknown: ignore
+          columns:
+            - checking_status
+            - credit_history
+            - purpose
+            - savings_status
+            - employment
+            - other_parties
+            - property_magnitude
+            - other_payment_plans
+            - housing
+            - job
+            - own_telephone
+            - foreign_worker
+        - name: numeric
+          type: passthrough
+          columns:
+            - duration
+            - credit_amount
+            - installment_commitment
+            - residence_since
+            - age
+            - existing_credits
+            - num_dependents
+    - name: classifier
+      type: xgboost.XGBClassifier
+
+# Excluded from feature_columns before fit; sex/personal_status/class/
+# credit_risk are validation- or label-only, approval_binary is the model's
+# own output. Ingest hard-gates on sex not appearing in feature_names_in_
+# (R-10 section 4.3).
+excluded_features:
+  - sex
+  - personal_status
+  - class
+  - credit_risk
+  - approval_binary
+
+classifier_hyperparameters:
+  n_estimators: 220
+  max_depth: 4
+  learning_rate: 0.05
+  subsample: 0.9
+  colsample_bytree: 0.9
+  objective: "binary:logistic"
+  eval_metric: logloss
+  random_state: 42
+  n_jobs: 1
