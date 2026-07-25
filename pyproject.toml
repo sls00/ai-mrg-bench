@@ -68,6 +68,7 @@ markers = [
     "phase2: P2 drift, API, and full demo",
     "phase3: P3 CA/CO state-overlay differentiation demo",
     "phase4: P4 Home Credit + BISG (stub)",
+    "phase5: P5 synth-fin CRE fair-lending demo (geography proxy, CI-gated)",
     "api: FastAPI endpoint smoke tests",
 ]
 

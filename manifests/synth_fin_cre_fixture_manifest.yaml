@@ -1,0 +1,29 @@
+fixture_version: '2026-07-24'
+seed: 42
+derivation_rules_version: '1.0'
+synth_fin_config_hash: de291b8f78f52e6c1732f0194760324b0dc64e68c5d698cab0446c579bd4bb8b
+files:
+- path: data/synthetic_cre/deals.csv
+  role: source_of_truth
+  rows: 5000
+  sha256: 83f3529bbecb6bccd3fa6cb24f43f47a58e77b1e4792b2d4532e4906c695e529
+- path: data/synthetic_cre/manifest.json
+  role: source_of_truth_manifest
+  rows: null
+  sha256: 7b702b4e2659ba921cdff401fd2714a4cf91e7c7bd1532599f31b73af017cef5
+- path: data/synthetic_cre/train.csv
+  role: model_training_population
+  rows: 3500
+  sha256: 41c12f9561af599b9015ea3586d5a376c9353a5845d3646b58af4f568fba4639
+- path: data/synthetic_cre/validation.csv
+  role: validation_run_primary
+  rows: 1500
+  sha256: 1eea320f772f7fef6a99b7ea1eaf35bb12092a6d11b484295e4b1cf8cd0f9fe5
+- path: models/synth-fin-cre-xgb-v1.0.joblib
+  role: pre_trained_model
+  rows: null
+  sha256: 8fb33e7af372df1b2e4f97a4f98a6fb91b78d6b190d991e4e65c7cbfca93d659
+- path: configs/feature_mapping_synth_fin_cre.yaml
+  role: adverse_action_feature_dictionary
+  rows: null
+  sha256: 02995b72c4cd801db4e27b3327d6bcd1ffa3af9d8b0f5dc89f3b2c8648d2b25b

@@ -74,6 +74,9 @@ class ValidationRunConfig:
     outputs: OutputConfig
     reference_dataset_path: Path | None = None
     monitor_dataset_path: Path | None = None
+    # Optional per-dataset override for workbench.report.LIMITATIONS_TEXT (P5+).
+    # `None` preserves the German-Credit-specific default byte-for-byte.
+    limitations_text: str | None = None
 
     @classmethod
     def from_yaml(cls, path: Path) -> ValidationRunConfig:
@@ -135,6 +138,7 @@ class ValidationRunConfig:
             ),
             reference_dataset_path=reference_dataset_path,
             monitor_dataset_path=monitor_dataset_path,
+            limitations_text=run.get("limitations_text"),
         )
 
     def as_metadata(self) -> dict[str, Any]:

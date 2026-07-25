@@ -110,7 +110,9 @@ jobs:
             labels=$(gh pr view "${{ github.event.pull_request.number }}" \
               --repo "${{ github.repository }}" \
               --json labels --jq '.labels[].name' || true)
-            if echo "$labels" | grep -qx 'phase:p3'; then
+            if echo "$labels" | grep -qx 'phase:p5'; then
+              marker='phase0 or phase1 or phase2 or phase3 or phase5'
+            elif echo "$labels" | grep -qx 'phase:p3'; then
               marker='phase0 or phase1 or phase2 or phase3'
             elif echo "$labels" | grep -qx 'phase:p2'; then
               marker='phase0 or phase1 or phase2'

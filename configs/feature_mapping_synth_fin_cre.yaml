@@ -1,0 +1,23 @@
+dataset: synth_fin_cre
+version: "1.0"
+label_columns:
+  elevated_credit_risk: elevated_credit_risk
+derived_columns:
+  minority_tract_top_quintile:
+    source_column: minority_tract_pct
+    mapping: "binary threshold at the 80th percentile (top quintile vs. rest); see workbench.fixtures.synth_fin_cre.derive_protected_attribute"
+  credit_decision_favorable:
+    source_column: adverse_action_flag
+    mapping: "1 - adverse_action_flag (polarity inversion to the workbench favorable/approved convention); see workbench.fixtures.synth_fin_cre.derive_decision_column"
+excluded_from_model_features:
+  - property_id
+  - market_msa
+  - vintage_year
+  - risk_grade
+  - default_flag
+  - adverse_action_flag
+  - elevated_credit_risk
+  - zip_income_quintile
+  - minority_tract_pct
+  - minority_tract_top_quintile
+  - credit_decision_favorable

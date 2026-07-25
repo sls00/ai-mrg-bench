@@ -1,0 +1,122 @@
+{
+  "config_hash": "de291b8f78f52e6c1732f0194760324b0dc64e68c5d698cab0446c579bd4bb8b",
+  "decimal_context": {
+    "money_quantum": "0.01",
+    "precision": 28,
+    "rate_quantum": "0.000001",
+    "ratio_quantum": "0.0001",
+    "rounding": "ROUND_HALF_UP"
+  },
+  "disclaimer": "Not a legal-compliance certification product. Outputs are for research, demo, and model-validation tooling only \u2014 not a substitute for regulated compliance determinations.",
+  "field_coverage": {
+    "adverse_action_flag": "synthetic_from_priors",
+    "amort_years": "real_fitted",
+    "appraised_value": "derived",
+    "borrower_entity_type": "synthetic_from_priors",
+    "debt_yield": "derived_from_fitted",
+    "default_flag": "real_fitted",
+    "dscr": "real_fitted",
+    "elevated_credit_risk": "rule_derived",
+    "gross_potential_rent": "derived_from_fitted",
+    "guarantor_strength_score": "synthetic_from_priors",
+    "interest_rate": "real_fitted",
+    "io_period_months": "real_fitted",
+    "loan_amount": "real_fitted",
+    "ltv": "real_fitted",
+    "market_msa": "real_fitted_if_loan_level_else_prior",
+    "minority_tract_pct": "synthetic_from_priors",
+    "noi": "derived_from_fitted",
+    "occupancy_pct": "synthetic_from_priors",
+    "other_income": "synthetic_from_priors",
+    "property_id": "synthetic_uuid",
+    "property_type": "synthetic_from_priors",
+    "rate_type": "real_fitted",
+    "risk_grade": "rule_derived",
+    "total_sf": "synthetic_from_priors",
+    "vacancy_loss": "derived_from_fitted",
+    "vintage_year": "real_fitted",
+    "zip_income_quintile": "synthetic_from_priors"
+  },
+  "finalized_at": "2026-07-25T02:50:30.093657+00:00",
+  "money_fields": [
+    "gross_potential_rent",
+    "vacancy_loss",
+    "other_income",
+    "noi",
+    "loan_amount",
+    "appraised_value"
+  ],
+  "output_checksum": "83f3529bbecb6bccd3fa6cb24f43f47a58e77b1e4792b2d4532e4906c695e529",
+  "package_version": "0.1.0",
+  "reproducibility_scope": "Same pinned uv.lock environment; not cross-BLAS bit-identity.",
+  "seed_source": "aggregate_calibrated:mlpd_vintage_summary_2025q3.csv",
+  "stages": [
+    {
+      "bias_profile": "proxy_discrimination_mild",
+      "n": 5000,
+      "scenario": "base",
+      "seed": 42,
+      "stage": "cli.parse"
+    },
+    {
+      "n_seed": 5000,
+      "source": "aggregate_calibrated:mlpd_vintage_summary_2025q3.csv",
+      "stage": "seed.load"
+    },
+    {
+      "cache_dir": "/home/sls00/portfolio/synth-fin/data/cache/copula",
+      "cache_hit": true,
+      "cache_key": "528ab61cf662f1f03541a530",
+      "fit_config": {
+        "columns": [
+          "loan_amount",
+          "interest_rate",
+          "ltv",
+          "dscr",
+          "occupancy_pct",
+          "amort_years",
+          "io_period_months",
+          "total_sf",
+          "guarantor_strength_score",
+          "minority_tract_pct",
+          "vintage_year"
+        ],
+        "eigval_floor": 1e-06,
+        "generator": "GaussianCopula",
+        "library": "scipy/numpy"
+      },
+      "stage": "copula.fit_or_load"
+    },
+    {
+      "n": 5000,
+      "seed": 42,
+      "stage": "copula.sample"
+    },
+    {
+      "affected_n": 1250,
+      "coefficient": 1.1373983137032657,
+      "direction": "increase",
+      "field": "adverse_action_flag",
+      "magnitude": 0.07499999999999998,
+      "profile_id": "proxy_discrimination_mild",
+      "proxy_field": "minority_tract_pct",
+      "quartile_rule": "top floor(n/4) by minority_tract_pct; stable row-order tie break",
+      "seed": 42,
+      "skip_reason": null,
+      "stage": "bias.apply",
+      "status": "applied"
+    },
+    {
+      "n_checked": 5000,
+      "stage": "constraints.validate",
+      "status": "pass"
+    },
+    {
+      "csv": "/tmp/sf-p5-panel/deals.csv",
+      "csv_checksum": "83f3529bbecb6bccd3fa6cb24f43f47a58e77b1e4792b2d4532e4906c695e529",
+      "parquet": "/tmp/sf-p5-panel/deals.parquet",
+      "stage": "io.write"
+    }
+  ],
+  "uv_lock_hash": "4dd06a9aed1ab74fccfc4a1d4c08dd566f0a7d43c1f53ca13effee1377a737ca"
+}

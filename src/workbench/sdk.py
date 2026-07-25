@@ -303,6 +303,7 @@ class ValidationRun:
             "materiality_tier": materiality.tier,
             "methodology_type": config.methodology_type,
             "theory_basis": config.theory_basis,
+            "protected_attribute_name": protected.name,
             "jurisdiction_frame": {
                 "federal_ecoa": config.regulatory_frame.federal_ecoa,
                 "fha_overlay": config.regulatory_frame.fha_overlay,
@@ -342,6 +343,7 @@ class ValidationRun:
             appendix_a_path=(adverse_action_paths or {}).get("methodology_json"),
             appendix_d_path=(adverse_action_paths or {}).get("fidelity_json"),
             appendix_c_path=(drift_paths or {}).get("drift_report"),
+            limitations_text=config.limitations_text,
         )
 
         artifact_refs = [

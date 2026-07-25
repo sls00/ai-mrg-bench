@@ -2,7 +2,7 @@
 
 Open, model-agnostic validation workbench for traditional ML credit models: tiering, bias/proxy testing, adverse-action translation, drift monitoring, hash-chained audit log, and OCC seven-section reporting.
 
-**Status:** P0–P3 German Credit demo path implemented; P4 Home Credit/BISG architecture notebook shipped (no CI gate).
+**Status:** P0–P3 German Credit demo path implemented; P4 Home Credit/BISG architecture notebook shipped (no CI gate); P5 synth-fin CRE fair-lending demo implemented (CI-gated).
 
 ## Quick start
 
@@ -54,6 +54,36 @@ uv run jupyter notebook notebooks/02_home_credit_bias_proxy.ipynb
 ### P4 demo limitation (BISG architecture only)
 
 German Credit has no US surname/geography fields, so race/ethnicity BISG cannot run on the canonical demo. P4 documents how a Home Credit–scale proxy path would attach to Layer C via `surgeo`, using a **synthetic US panel** (`data/illustrative/home_credit_bisg_proxy_sample.csv`) — not a vendored Kaggle dump. `surgeo` 1.1.2 uses 2010 Census tables (2020 DHC gap: deep-research V4/V5). This is review-support architecture evidence, not an ECOA determination.
+
+## Demo path (P5 — synth-fin CRE fair-lending demo)
+
+P5 is an **additive, CI-gated** demo phase built on a synthetic commercial real-estate (CRE) panel from the sibling [`synth-fin`](https://github.com/sls00/synth-fin) project. It **complements P4's BISG architecture — it does not replace it**: P4 shows how race/ethnicity BISG attaches at Home Credit scale; P5 exercises the same three-layer bias battery end-to-end (Layers A/B/C, adverse-impact ratio, error parity, proxy risk) on a **geography proxy** (`minority_tract_pct`, binned at its top quintile) — not surname/BISG race inference.
+
+```bash
+uv run workbench validate run \
+  --config configs/synth_fin_cre_baseline.yaml \
+  --output-dir artifacts/synth_fin_cre_p5/
+```
+
+The committed panel (`data/synthetic_cre/deals.csv` + `manifest.json`) is a byte-identical copy of synth-fin's own generator output, reproducible via:
+
+```bash
+cd ../synth-fin
+uv run synth-fin generate \
+  --scenario base \
+  --bias-profile proxy_discrimination_mild \
+  --n 5000 \
+  --seed 42 \
+  --out /tmp/sf-p5-panel
+```
+
+See [`docs/dev.md`](docs/dev.md#p5-fixture-bootstrap-synth-fin-cre-panel) for the full bootstrap sequence (train/validation split, model training, fixture-manifest freeze). `scripts/check_fixture_hashes.sh` gates this panel the same way it already gates German Credit's fixtures — no new CI job, one generalized script.
+
+### P5 demo limitations
+
+- **Geography proxy, not BISG.** `minority_tract_top_quintile` bins `minority_tract_pct` at its 80th percentile; it is a census-tract-level geography proxy, not a surname/BISG race or ethnicity inference. It complements, and does not replace, P4's BISG architecture demo.
+- **Synthetic ground truth, not observed disparity.** The subgroup adverse-decision shift is a `synth-fin`-injected bias profile (`proxy_discrimination_mild`), independently reproducible from the panel's `manifest.json` — not an observed real-world lending disparity.
+- **Adverse-action translation out of scope.** `modules.adverse_action_translator` is disabled for this config: `workbench.adverse_action`'s Reg B specific-reasons mapping-rules catalog is German-Credit-specific and does not yet cover CRE features. Extending it is future work, not part of this demo phase.
 
 ## Documentation
 
