@@ -12,6 +12,7 @@ def pytest_configure(config: pytest.Config) -> None:
         "phase2",
         "phase3",
         "phase4",
+        "phase5",
         "api",
     ):
         config.addinivalue_line("markers", f"{marker}: see pyproject.toml markers table")

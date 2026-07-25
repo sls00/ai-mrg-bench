@@ -6,3 +6,9 @@ protected_attributes:
       - direct
       - bisg_proxy
       - hmda
+  # P5 (synth-fin CRE demo): geography proxy, not surname/BISG.
+  - name: minority_tract_top_quintile
+    prohibited_as_model_input: true
+    allowed_in_dataset: true
+    sources:
+      - geography_proxy

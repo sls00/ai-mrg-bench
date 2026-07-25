@@ -48,6 +48,7 @@ def generate_occ_report(
     appendix_a_path: Path | None = None,
     appendix_d_path: Path | None = None,
     appendix_c_path: Path | None = None,
+    limitations_text: str | None = None,
 ) -> ReportArtifacts:
     """Render the OCC report + write appendices B and E.
 
@@ -57,7 +58,14 @@ def generate_occ_report(
     `adverse_action.methodology_published` / `drift.event` audit events —
     their paths are passed in here only to populate the report appendix
     index and template context, not written again.
+
+    `limitations_text` defaults to the German-Credit-specific `LIMITATIONS_TEXT`
+    module constant (byte-identical to pre-P5 behavior) when omitted; datasets
+    outside that demo (e.g. P5's synth-fin CRE panel) pass their own accurate
+    text via `ValidationRunConfig.limitations_text` instead of inheriting a
+    claim about a dataset they don't use.
     """
+    resolved_limitations = limitations_text if limitations_text is not None else LIMITATIONS_TEXT
     artifact_dir.mkdir(parents=True, exist_ok=True)
     appendix_b_path = artifact_dir / "bias_battery_summary.json"
     appendix_b_path.write_text(json.dumps(bias_summary, indent=2, sort_keys=True))
@@ -76,7 +84,7 @@ def generate_occ_report(
     markdown = template.render(
         context=run_context,
         disclaimer=DISCLAIMER_TEXT,
-        limitations=LIMITATIONS_TEXT,
+        limitations=resolved_limitations,
     )
 
     markdown_path = artifact_dir / "german_credit_validation_report.md"
@@ -85,7 +93,7 @@ def generate_occ_report(
     report_json = {
         "run_context": run_context,
         "disclaimer": DISCLAIMER_TEXT,
-        "limitations": LIMITATIONS_TEXT,
+        "limitations": resolved_limitations,
         "appendices": {
             "A": str(appendix_a_path) if appendix_a_path else _APPENDIX_NOT_APPLICABLE,
             "B": str(appendix_b_path),
