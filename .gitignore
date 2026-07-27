@@ -31,3 +31,7 @@ docs/learn/03-demo-script.md
 # OS
 .DS_Store
 Thumbs.db
+
+# Nested worktrees
+.worktrees/*
+!.worktrees/README.md
