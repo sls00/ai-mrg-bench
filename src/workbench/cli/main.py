@@ -38,6 +38,28 @@ def show_version() -> None:
     typer.echo(__version__)
 
 
+@app.command("ui")
+def open_ui(
+    host: str = typer.Option("127.0.0.1", "--host"),
+    port: int = typer.Option(8765, "--port"),
+) -> None:
+    """Open Evidence Workbench Validation Review (PATH exec; no reverse import)."""
+    import os
+    import shutil
+
+    binary = shutil.which("evidence-workbench")
+    if not binary:
+        typer.echo(
+            "ERROR: evidence-workbench not found on PATH.\n"
+            "Install the Evidence Workbench package (portfolio sibling evid-wb-ui):\n"
+            "  cd ../evid-wb-ui && uv sync && export PATH=\"$(pwd)/.venv/bin:$PATH\"\n"
+            "Then re-run: workbench ui",
+            err=True,
+        )
+        raise typer.Exit(code=127)
+    os.execv(binary, [binary, "--home", "validation", "--host", host, "--port", str(port)])
+
+
 def main() -> None:
     app()
 

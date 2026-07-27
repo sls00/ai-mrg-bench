@@ -36,6 +36,8 @@ pdf = ["weasyprint>=62.0"]
 api = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "httpx>=0.27"]
 notebooks = ["jupyter>=1.0", "matplotlib>=3.8", "plotly>=5.18"]
 analytical = ["duckdb>=0.10"]
+# Marker extra: `workbench ui` execs `evidence-workbench` from PATH (no reverse import).
+ui = []
 
 [dependency-groups]
 dev = [
