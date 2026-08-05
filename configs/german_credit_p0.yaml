@@ -28,7 +28,7 @@ validation_run:
     drift_monitor: false
   audit:
     finos_tier: 2
-    actor: validator@example.com
+    actor: Steven L. Sorenson
     db_path: workbench.db
   outputs:
     report_format: [markdown]

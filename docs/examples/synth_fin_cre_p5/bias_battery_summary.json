@@ -1,0 +1,67 @@
+{
+  "aequitas_pin": "1.1.0",
+  "jurisdiction_frame": {
+    "federal_ecoa": "proxy_discrimination",
+    "fha_overlay": false,
+    "state_overlay": "none"
+  },
+  "layers": {
+    "A": {
+      "air": 0.9036497668120957,
+      "selection_rate_by_group": {
+        "below_top_quintile": 0.9496284062758051,
+        "top_quintile": 0.8581314878892734
+      },
+      "selection_rate_gap": -0.09149691838653173,
+      "smd_score": -0.024809066362094324
+    },
+    "B": {
+      "fnr_by_group": {
+        "below_top_quintile": 0.05853658536585366,
+        "top_quintile": 0.13043478260869565
+      },
+      "fnr_gap": 0.071898197242842,
+      "fnr_parity_ratio": 2.2282608695652173,
+      "fpr_by_group": {
+        "below_top_quintile": 0.9512922465208747,
+        "top_quintile": 0.8559670781893004
+      },
+      "fpr_gap": -0.09532516833157434,
+      "fpr_parity_ratio": 0.8997940236765268
+    },
+    "C": {
+      "auxiliary_classifier_auc": 0.542351413824768,
+      "top_proxy_correlations": [
+        {
+          "abs_correlation": 0.07206411799645895,
+          "feature": "borrower_entity_type"
+        },
+        {
+          "abs_correlation": 0.05124050710741451,
+          "feature": "debt_yield"
+        },
+        {
+          "abs_correlation": 0.04791898969836978,
+          "feature": "property_type"
+        },
+        {
+          "abs_correlation": 0.0466803063152123,
+          "feature": "rate_type"
+        },
+        {
+          "abs_correlation": 0.04211173622515528,
+          "feature": "appraised_value"
+        }
+      ]
+    }
+  },
+  "protected_attribute": "minority_tract_top_quintile",
+  "reasoning": {
+    "regulatory_note": "Federal ECOA frame is proxy_discrimination; outcomes metrics support risk review.",
+    "why_layer_a": "Layer A captures AIR, selection-rate gap, and score-distribution imbalance.",
+    "why_layer_b": "Layer B checks whether model errors disproportionately burden protected groups.",
+    "why_layer_c": "Layer C estimates proxy discrimination risk via feature association and predictability."
+  },
+  "reference_group": "below_top_quintile",
+  "run_id": "synth-fin-cre-demo-baseline"
+}

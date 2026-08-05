@@ -66,9 +66,9 @@ Adverse-action translation methodology: Not run — adverse_action_translator mo
 
 ### V.2 Outcomes Analysis
 
-- Layer A: AIR={{ context.layer_a.air }}, selection-rate gap={{ context.layer_a.selection_rate_gap }}, SMD(score)={{ context.layer_a.smd_score }}
-- Layer B: FPR parity={{ context.layer_b.fpr_parity_ratio }}, FNR parity={{ context.layer_b.fnr_parity_ratio }}
-- Layer C: top proxy correlations captured, auxiliary classifier AUC={{ context.layer_c.auxiliary_classifier_auc }}
+- Layer A: AIR={{ "%.4f"|format(context.layer_a.air) }}, selection-rate gap={{ "%.4f"|format(context.layer_a.selection_rate_gap) }}, SMD(score)={{ "%.4f"|format(context.layer_a.smd_score) }}
+- Layer B: FPR parity={{ "%.4f"|format(context.layer_b.fpr_parity_ratio) }}, FNR parity={{ "%.4f"|format(context.layer_b.fnr_parity_ratio) }}
+- Layer C: top proxy correlations captured, auxiliary classifier AUC={{ "%.4f"|format(context.layer_c.auxiliary_classifier_auc) }}
 - Challenger outcomes: Not performed
 {% if context.adverse_action %}
 - Proxy-risk cross-check (R-04 Sec 6): {% if context.adverse_action.proxy_overlap_features %}adverse-action principal-reason feature(s) also flagged in Layer C proxy correlations: {{ context.adverse_action.proxy_overlap_features | join(', ') }} — reasons for these factors disclose the specific scored value, not a broad proxy-obscuring bucket.{% else %}no overlap between adverse-action principal-reason features and Layer C top proxy correlations in this run.{% endif %}

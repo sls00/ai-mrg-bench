@@ -8,8 +8,8 @@ version = "0.0.0"
 description = "AI Model Risk & Governance Workbench — validation, audit, and OCC reporting"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
-authors = [{ name = "Steven Sorenson" }]
+license = { text = "BlueOak-1.0.0" }
+authors = [{ name = "Steven L. Sorenson" }]
 dependencies = [
     "scikit-learn>=1.4",
     "numpy>=1.26",

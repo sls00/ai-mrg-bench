@@ -169,7 +169,7 @@ uv run workbench validate run \
 ```
 run_id=german-credit-demo-ca-overlay
 artifact_dir=.../artifacts/run_ca_overlay
-report_path=.../artifacts/run_ca_overlay/german_credit_validation_report.md
+report_path=.../artifacts/run_ca_overlay/validation_report.md
 status=PASS
 ```
 
@@ -237,7 +237,7 @@ After the P3 CA run, `artifacts/run_ca_overlay/` contains:
 
 | File | What it is | Why it matters |
 | ---- | ---------- | -------------- |
-| `german_credit_validation_report.md` | OCC 2026-13 seven-section validation report | The document an independent validator would hand to MRM committee |
+| `validation_report.md` | OCC 2026-13 seven-section validation report | The document an independent validator would hand to MRM committee |
 | `report.json` | Machine-readable index of run context and appendix paths | API consumers, automation, reproducibility |
 
 ### Appendix artifacts
