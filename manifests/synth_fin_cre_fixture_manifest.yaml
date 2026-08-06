@@ -10,7 +10,7 @@ files:
 - path: data/synthetic_cre/manifest.json
   role: source_of_truth_manifest
   rows: null
-  sha256: 7b702b4e2659ba921cdff401fd2714a4cf91e7c7bd1532599f31b73af017cef5
+  sha256: 9b75cb09232fa34650b65984eea3ef89f4ecdd99aaa25086741704a41caf63a5
 - path: data/synthetic_cre/train.csv
   role: model_training_population
   rows: 3500

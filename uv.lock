@@ -4127,7 +4127,7 @@ requires-dist = [
     { name = "weasyprint", marker = "extra == 'pdf'", specifier = ">=62.0" },
     { name = "xgboost", specifier = ">=2.0" },
 ]
-provides-extras = ["pdf", "api", "notebooks", "analytical"]
+provides-extras = ["pdf", "api", "notebooks", "analytical", "ui"]
 
 [package.metadata.requires-dev]
 dev = [

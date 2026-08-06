@@ -64,7 +64,7 @@
       "stage": "seed.load"
     },
     {
-      "cache_dir": "/home/sls00/portfolio/synth-fin/data/cache/copula",
+      "cache_dir": "data/cache/copula",
       "cache_hit": true,
       "cache_key": "528ab61cf662f1f03541a530",
       "fit_config": {

@@ -5,7 +5,7 @@ Source panel comes from an external `synth-fin generate` run (this repo does
 not vendor or reimplement synth-fin's generator). Regeneration command
 (documented in both READMEs):
 
-    cd /home/sls00/portfolio/synth-fin
+    cd ../synth-fin
     uv sync
     uv run synth-fin generate \\
       --scenario base \\
