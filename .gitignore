@@ -25,6 +25,7 @@ docs/learn/03-demo-script.md
 # IDE / local agent notes
 .vscode/
 .idea/
+.cursor/
 .gstack/
 .claude/
 
