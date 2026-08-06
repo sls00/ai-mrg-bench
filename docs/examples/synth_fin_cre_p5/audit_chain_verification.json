@@ -1,0 +1,10 @@
+{
+  "breaks": [],
+  "event_type_counts": {
+    "bias_battery.result": 1,
+    "validation_run.complete": 1,
+    "validation_run.start": 1
+  },
+  "events": 3,
+  "status": "PASS"
+}

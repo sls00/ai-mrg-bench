@@ -87,19 +87,32 @@ def generate_occ_report(
         limitations=resolved_limitations,
     )
 
-    markdown_path = artifact_dir / "german_credit_validation_report.md"
+    markdown_path = artifact_dir / "validation_report.md"
     markdown_path.write_text(markdown.strip() + "\n")
+
+    def _appendix_ref(path: Path) -> str:
+        """Render an appendix reference relative to the artifact directory.
+
+        Absolute paths would leak the generating machine's filesystem layout
+        into a published artifact, and are meaningless to anyone reading the
+        report elsewhere. Every appendix is written into artifact_dir, so the
+        relative form is both portable and sufficient to locate the file.
+        """
+        try:
+            return str(path.resolve().relative_to(artifact_dir.resolve()))
+        except ValueError:
+            return path.name
 
     report_json = {
         "run_context": run_context,
         "disclaimer": DISCLAIMER_TEXT,
         "limitations": resolved_limitations,
         "appendices": {
-            "A": str(appendix_a_path) if appendix_a_path else _APPENDIX_NOT_APPLICABLE,
-            "B": str(appendix_b_path),
-            "C": str(appendix_c_path) if appendix_c_path else _APPENDIX_C_NOT_RUN,
-            "D": str(appendix_d_path) if appendix_d_path else _APPENDIX_NOT_APPLICABLE,
-            "E": str(appendix_e_path),
+            "A": _appendix_ref(appendix_a_path) if appendix_a_path else _APPENDIX_NOT_APPLICABLE,
+            "B": _appendix_ref(appendix_b_path),
+            "C": _appendix_ref(appendix_c_path) if appendix_c_path else _APPENDIX_C_NOT_RUN,
+            "D": _appendix_ref(appendix_d_path) if appendix_d_path else _APPENDIX_NOT_APPLICABLE,
+            "E": _appendix_ref(appendix_e_path),
         },
     }
     report_json_path = artifact_dir / "report.json"

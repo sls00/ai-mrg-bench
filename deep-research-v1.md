@@ -389,7 +389,7 @@ Seven Jinja2 templates in `templates/occ_2026_13/`:
 
 | Artifact | Appendix | Audit event |
 | -------- | -------- | ----------- |
-| `german_credit_validation_report.md` | — | `report.generated` |
+| `validation_report.md` | — | `report.generated` |
 | `translation_methodology_v1.json` | A | `adverse_action.methodology_published` |
 | `bias_battery_summary.json` | B | `bias_battery.result` |
 | `drift_report.json` | C | `drift.event` |

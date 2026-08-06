@@ -313,7 +313,9 @@ class ValidationRun:
             "layer_b": bias.payload["layers"]["B"],
             "layer_c": bias.payload["layers"]["C"],
             "finos_tier": config.audit.finos_tier,
-            "audit_db": str(db_path),
+            # Name only: the absolute path leaks the generating machine's
+            # filesystem layout into a published artifact.
+            "audit_db": db_path.name,
             "audit_status": audit_summary.status,
             "audit_events": audit_summary.total_events,
             "audit_breaks": len(audit_summary.breaks),
@@ -348,7 +350,7 @@ class ValidationRun:
 
         artifact_refs = [
             {
-                "name": "german_credit_validation_report.md",
+                "name": "validation_report.md",
                 "sha256": _sha256_file(report.markdown_path),
             },
             {"name": "report.json", "sha256": _sha256_file(report.report_json_path)},

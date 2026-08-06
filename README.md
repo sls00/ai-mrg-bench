@@ -4,6 +4,10 @@ Open, model-agnostic validation workbench for traditional ML credit models: tier
 
 **Status:** P0–P3 German Credit demo path implemented; P4 Home Credit/BISG architecture notebook shipped (no CI gate); P5 synth-fin CRE fair-lending demo implemented (CI-gated).
 
+## See the output first
+
+[**`docs/examples/`**](docs/examples/) holds a committed run you can read without installing anything — an OCC seven-section validation report, the bias metrics behind it, and its audit-chain verification. In that run the adverse impact ratio (0.9036) clears the conventional four-fifths screen while error-rate parity shows a 2.23× gap, which is the case a single-metric screen misses.
+
 ## Quick start
 
 ```bash
@@ -104,4 +108,4 @@ Historical citations of withdrawn circulars are allowed when clearly marked hist
 
 ## License
 
-MIT
+[Blue Oak Model License 1.0.0](LICENSE) — Copyright © 2026 Steven L. Sorenson.

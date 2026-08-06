@@ -48,7 +48,7 @@ Phasing inherits R-09 §8 ordering. Each phase adds modules and report sections;
 - [ ] Intake gate **PASS** (statistical credit model; not excluded category)
 - [ ] Materiality engine assigns **T3** (`exposure: 0.15`, `purpose: credit_decisioning`)
 - [ ] `bias_battery` completes three layers for `sex` under `federal_ecoa: proxy_discrimination`
-- [ ] Report `german_credit_validation_report.md` contains populated §I–VI (§V.3 = "Not run — drift module disabled")
+- [ ] Report `validation_report.md` contains populated §I–VI (§V.3 = "Not run — drift module disabled")
 - [ ] Appendices **B** (bias summary) and **E** (audit verification stub) present; A/C/D marked N/A
 - [ ] `workbench audit verify-chain` → **PASS** (≥3 events: `validation_run.start`, `bias_battery.result`, `validation_run.complete`, `report.generated`)
 - [ ] `bias_battery.result` audit payload includes `jurisdiction_frame` block
@@ -334,8 +334,8 @@ workbench validate run --config configs/german_credit_full.yaml --format markdow
 
 | Artifact | Path pattern | Phase | Bound to audit |
 | -------- | ------------ | ----- | -------------- |
-| OCC validation report (MD) | `artifacts/{run_id}/german_credit_validation_report.md` | P0+ | `report.generated` |
-| OCC validation report (PDF) | `artifacts/{run_id}/german_credit_validation_report.pdf` | P1+ optional | same |
+| OCC validation report (MD) | `artifacts/{run_id}/validation_report.md` | P0+ | `report.generated` |
+| OCC validation report (PDF) | `artifacts/{run_id}/validation_report.pdf` | P1+ optional | same |
 | Report JSON (machine-readable) | `artifacts/{run_id}/report.json` | P0+ | `report.generated` |
 | **Appendix A** — translation methodology | `translation_methodology_v1.json`, `.md` | P1+ | `adverse_action.methodology_published` |
 | **Appendix B** — bias battery tables | `bias_battery_summary.json` | P0+ | `bias_battery.result` |

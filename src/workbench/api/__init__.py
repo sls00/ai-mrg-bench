@@ -16,7 +16,7 @@ from pydantic import BaseModel
 from workbench.audit import verify_audit_chain
 from workbench.sdk import ValidationRun
 
-REPORT_FILENAME = "german_credit_validation_report.md"
+REPORT_FILENAME = "validation_report.md"
 DEFAULT_ARTIFACTS_ROOT = "artifacts"
 
 app = FastAPI(
