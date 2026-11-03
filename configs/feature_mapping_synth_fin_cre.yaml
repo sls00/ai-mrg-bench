@@ -2,6 +2,7 @@ dataset: synth_fin_cre
 version: "1.0"
 label_columns:
   elevated_credit_risk: elevated_credit_risk
+  creditworthy: creditworthy
 derived_columns:
   minority_tract_top_quintile:
     source_column: minority_tract_pct
@@ -9,6 +10,9 @@ derived_columns:
   credit_decision_favorable:
     source_column: adverse_action_flag
     mapping: "1 - adverse_action_flag (polarity inversion to the workbench favorable/approved convention); see workbench.fixtures.synth_fin_cre.derive_decision_column"
+  creditworthy:
+    source_column: elevated_credit_risk
+    mapping: "1 - elevated_credit_risk (bias-battery ground-truth label, 1 = creditworthy, matching the decision column's favorable polarity); see workbench.fixtures.synth_fin_cre.derive_label_column"
 excluded_from_model_features:
   - property_id
   - market_msa
@@ -21,3 +25,4 @@ excluded_from_model_features:
   - minority_tract_pct
   - minority_tract_top_quintile
   - credit_decision_favorable
+  - creditworthy

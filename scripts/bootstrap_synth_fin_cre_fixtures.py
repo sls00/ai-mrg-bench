@@ -21,7 +21,7 @@ Then, from this repo:
 
 `data/synthetic_cre/deals.csv` and `manifest.json` are byte-identical copies
 of the synth-fin output (config_hash/checksum provenance preserved).
-`train.csv`/`validation.csv` are workbench-side derivatives with the two
+`train.csv`/`validation.csv` are workbench-side derivatives with the three
 additive columns from `workbench.fixtures.synth_fin_cre` attached.
 """
 
@@ -41,7 +41,7 @@ from sklearn.preprocessing import OneHotEncoder
 from xgboost import XGBClassifier
 
 from workbench.fixtures.synth_fin_cre import (
-    LABEL_COLUMN,
+    MODEL_TARGET_COLUMN,
     add_workbench_columns,
     model_feature_columns,
 )
@@ -91,7 +91,7 @@ def main() -> None:
         enriched,
         test_size=TEST_SIZE,
         random_state=SEED,
-        stratify=enriched[LABEL_COLUMN],
+        stratify=enriched[MODEL_TARGET_COLUMN],
     )
     train_df = train_df.reset_index(drop=True)
     validation_df = validation_df.reset_index(drop=True)
@@ -124,7 +124,7 @@ def main() -> None:
             ),
         ],
     )
-    model.fit(train_df[feature_columns], train_df[LABEL_COLUMN])
+    model.fit(train_df[feature_columns], train_df[MODEL_TARGET_COLUMN])
 
     train_path = data_dir / "train.csv"
     validation_path = data_dir / "validation.csv"

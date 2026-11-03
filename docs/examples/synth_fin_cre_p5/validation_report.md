@@ -42,7 +42,7 @@ Adverse-action translation methodology: Not run — adverse_action_translator mo
 ### V.2 Outcomes Analysis
 
 - Layer A: AIR=0.9036, selection-rate gap=-0.0915, SMD(score)=-0.0248
-- Layer B: FPR parity=0.8998, FNR parity=2.2283
+- Layer B: FPR parity=0.9236, FNR parity=2.9571
 - Layer C: top proxy correlations captured, auxiliary classifier AUC=0.5424
 - Challenger outcomes: Not performed
 
