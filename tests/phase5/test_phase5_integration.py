@@ -121,3 +121,37 @@ def test_phase5_run_protected_attribute_excluded_from_model_features(
     assert "minority_tract_pct" not in feature_names
     assert "credit_decision_favorable" not in feature_names
     assert "elevated_credit_risk" not in feature_names
+    assert "creditworthy" not in feature_names
+
+
+def test_phase5_label_is_creditworthy_with_favorable_polarity(phase5_run: object) -> None:
+    """Layer B is only meaningful if label and decision share 1 = favorable.
+
+    Regression guard for the original P5 wiring, which scored decisions
+    (1 = approved) against `elevated_credit_risk` (1 = risky), so "FNR"
+    counted risky loans that were denied.
+    """
+    import pandas as pd
+
+    from workbench.fixtures.synth_fin_cre import LABEL_COLUMN, MODEL_TARGET_COLUMN
+
+    run = phase5_run
+    assert run.config.label_column == LABEL_COLUMN == "creditworthy"
+    dataset = pd.read_csv(run.config.dataset_path)
+    assert (dataset[LABEL_COLUMN] == 1 - dataset[MODEL_TARGET_COLUMN]).all()
+
+
+def test_phase5_layer_b_surfaces_creditworthy_denial_gap(phase5_run: object) -> None:
+    """The planted denial shift must show up as creditworthy loans in the
+    top-quintile group being denied materially more often (FNR parity),
+    even though Layer A's AIR clears the four-fifths screen.
+    """
+    run = phase5_run
+    payload = json.loads((run.result.artifact_dir / "bias_battery_summary.json").read_text())
+    layer_a = payload["layers"]["A"]
+    layer_b = payload["layers"]["B"]
+
+    fnr = layer_b["fnr_by_group"]
+    assert fnr["top_quintile"] > fnr["below_top_quintile"]
+    assert layer_b["fnr_parity_ratio"] >= 2.5
+    assert layer_a["air"] >= 0.80

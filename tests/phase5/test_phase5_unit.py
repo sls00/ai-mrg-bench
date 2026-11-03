@@ -8,11 +8,14 @@ import pytest
 from workbench.fixtures.synth_fin_cre import (
     DECISION_COLUMN,
     EXCLUDED_FROM_MODEL_FEATURES,
+    LABEL_COLUMN,
+    MODEL_TARGET_COLUMN,
     PROTECTED_ATTRIBUTE_COLUMN,
     REFERENCE_LABEL,
     TOP_QUINTILE_LABEL,
     add_workbench_columns,
     derive_decision_column,
+    derive_label_column,
     derive_protected_attribute,
     model_feature_columns,
 )
@@ -63,6 +66,33 @@ def test_derive_decision_column_rejects_non_binary() -> None:
         derive_decision_column(deals)
 
 
+def test_derive_label_column_inverts_risk_flag_to_creditworthy() -> None:
+    deals = _toy_deals()
+    label = derive_label_column(deals)
+    assert label.name == LABEL_COLUMN
+    # 1 = creditworthy (not elevated risk), the same 1 = favorable polarity as
+    # the decision column, so Layer B FNR means "creditworthy loans denied".
+    assert list(label) == [1, 1, 1, 0, 1, 1, 0, 1, 0, 0]
+
+
+def test_derive_label_column_rejects_non_binary() -> None:
+    deals = _toy_deals()
+    deals["elevated_credit_risk"] = [3] * len(deals)
+    with pytest.raises(ValueError, match="must be 0/1"):
+        derive_label_column(deals)
+
+
+def test_derive_label_column_missing_column_raises() -> None:
+    with pytest.raises(KeyError):
+        derive_label_column(pd.DataFrame({"other": [0, 1]}))
+
+
+def test_label_and_model_target_are_distinct_and_excluded_from_features() -> None:
+    assert LABEL_COLUMN != MODEL_TARGET_COLUMN
+    assert LABEL_COLUMN in EXCLUDED_FROM_MODEL_FEATURES
+    assert MODEL_TARGET_COLUMN in EXCLUDED_FROM_MODEL_FEATURES
+
+
 def test_add_workbench_columns_does_not_mutate_input() -> None:
     deals = _toy_deals()
     original_columns = set(deals.columns)
@@ -70,6 +100,7 @@ def test_add_workbench_columns_does_not_mutate_input() -> None:
     assert set(deals.columns) == original_columns, "input frame must not be mutated"
     assert PROTECTED_ATTRIBUTE_COLUMN in enriched.columns
     assert DECISION_COLUMN in enriched.columns
+    assert LABEL_COLUMN in enriched.columns
     assert len(enriched) == len(deals)
 
 

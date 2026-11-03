@@ -79,7 +79,7 @@ def main() -> None:
     payload = {
         "fixture_version": str(date.today()),
         "seed": 42,
-        "derivation_rules_version": "1.0",
+        "derivation_rules_version": "1.1",
         "synth_fin_config_hash": synth_fin_config_hash,
         "files": manifest_rows,
     }

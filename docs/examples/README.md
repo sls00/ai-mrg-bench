@@ -20,9 +20,11 @@ The bias profile in this dataset is **injected on purpose**, so the correct answ
 It does, and the interesting part is *where*:
 
 - **Layer A** reports an adverse impact ratio of **0.9036**. The conventional four-fifths screen flags at 0.80, so this run **passes** that test.
-- **Layer B** reports a false-negative-rate parity ratio of **2.2283** — the error rate differs by more than a factor of two between groups (0.0585 vs 0.1304).
+- **Layer B** reports a false-negative-rate parity ratio of **2.9571**: creditworthy loans in the affected group were denied nearly three times as often as in the reference group (14.4% vs 4.9%).
 
 A single-metric adverse-impact screen would have cleared this model. Error-rate parity does not. That gap is the reason the battery has three layers rather than one.
+
+> **Correction (2 Nov 2026):** an earlier version of this run reported an FNR parity of 2.2283. That figure scored decisions against `elevated_credit_risk` (1 = risky) while the decision column uses 1 = approved, so it counted risky loans that were denied, which is not an error. The battery now uses a derived `creditworthy` label (1 = good, matching German Credit's `credit_risk`). The model, data split and Layer A results are unchanged.
 
 ### Reproducing it
 

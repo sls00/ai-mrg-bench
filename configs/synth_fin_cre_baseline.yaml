@@ -5,7 +5,7 @@ validation_run:
   model: models/synth-fin-cre-xgb-v1.0.joblib
   dataset: data/synthetic_cre/validation.csv
   decision_column: credit_decision_favorable
-  label_column: elevated_credit_risk
+  label_column: creditworthy
   intended_use: Commercial real-estate (CRE) credit decisioning support for fair-lending review demonstration.
   methodology_type: statistical_credit_model
   theory_basis: Gradient-boosted statistical credit-risk model trained on a synth-fin synthetic CRE panel.

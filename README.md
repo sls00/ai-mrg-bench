@@ -6,7 +6,7 @@ Open, model-agnostic validation workbench for traditional ML credit models: tier
 
 ## See the output first
 
-[**`docs/examples/`**](docs/examples/) holds a committed run you can read without installing anything — an OCC seven-section validation report, the bias metrics behind it, and its audit-chain verification. In that run the adverse impact ratio (0.9036) clears the conventional four-fifths screen while error-rate parity shows a 2.23× gap, which is the case a single-metric screen misses.
+[**`docs/examples/`**](docs/examples/) holds a committed run you can read without installing anything — an OCC seven-section validation report, the bias metrics behind it, and its audit-chain verification. In that run the adverse impact ratio (0.9036) clears the conventional four-fifths screen while error-rate parity shows creditworthy loans in the affected group denied 2.96× as often, which is the case a single-metric screen misses.
 
 ## Quick start
 

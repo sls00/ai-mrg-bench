@@ -36,17 +36,17 @@
     },
     "layer_b": {
       "fnr_by_group": {
-        "below_top_quintile": 0.05853658536585366,
-        "top_quintile": 0.13043478260869565
+        "below_top_quintile": 0.048707753479125246,
+        "top_quintile": 0.1440329218106996
       },
-      "fnr_gap": 0.071898197242842,
-      "fnr_parity_ratio": 2.2282608695652173,
+      "fnr_gap": 0.09532516833157435,
+      "fnr_parity_ratio": 2.9570840681951798,
       "fpr_by_group": {
-        "below_top_quintile": 0.9512922465208747,
-        "top_quintile": 0.8559670781893004
+        "below_top_quintile": 0.9414634146341463,
+        "top_quintile": 0.8695652173913043
       },
-      "fpr_gap": -0.09532516833157434,
-      "fpr_parity_ratio": 0.8997940236765268
+      "fpr_gap": -0.07189819724284197,
+      "fpr_parity_ratio": 0.9236314485244425
     },
     "layer_c": {
       "auxiliary_classifier_auc": 0.542351413824768,
